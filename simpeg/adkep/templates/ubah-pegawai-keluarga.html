@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h2>
+                Data Keluarga
+            </h2>
+
+            {% for message in messages %}
+            {% if message %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endif %}
+            {% endfor %}
+
+            {% if pesan %}
+            <div class="alert alert-success">{{ pesan }}</div>
+            {% endif %}
+            <form action="{% url 'ubah_pegawaikeluarga' pegawai.id %}"method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+            
+                <button class="btn btn-primary">Simpan</button>
+                <a href="/pegawaikeluarga"class="btn btn-danger">Kembali</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

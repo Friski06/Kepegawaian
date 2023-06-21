@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+    
+{% block content %}
+    <center>
+        <h1>SIMPEG</h1>
+    </center>
+
+    <h2>
+        Tolak Ukur Penilaian Pegawai
+    </h2>
+  
+   <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            {% for message in messages %}
+            {% if message %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endif %}
+            {% endfor %}
+           <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                   
+                    <th>Kerapian</th>
+                    <th>Kesopanan</th>
+                    <th>Dedikasi</th>
+                    <th>Loyalitas</th>
+                    <th>Disiplin</th>
+                    <th>Kerjasama</th>
+                    <th>Tupoksi</th>
+                    
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for tolakukur in tolakukur %}
+                <tr>
+                    
+                    <td>
+                        <center>
+                            <a href="#" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                            <!-- Button trigger modal -->
+                            <button data-toggle="modal" data-target="#hapus-{{ cuti.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </center>
+                    </td>
+                    <div class="modal" id="hapus-{{ cuti.id }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">Hapus</h3>
+                                </div>
+                                <div class="modal-body">
+                                    Apakah anda yakin ingin menghapus?
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="#" class="btn btn-danger">Hapus</a>
+                                    <button class="btn btn-dark" data-dismiss="modal">Tidak</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tr>
+                {% endfor %}
+            </tbody>
+           </table> 
+        </div>
+    </div>
+   </div>
+
+{% endblock content %}
+    
+
+
+

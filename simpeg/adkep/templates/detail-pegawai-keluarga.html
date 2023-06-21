@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Detail Pendidikan</h2>
+                <table class="table table-bordered">
+                    {% for pegawai in pegawai %}
+                    <tbody>
+                        <tr>
+                            <th>PENDIDIKAN TERAKIR:</th>
+                            <td>{{ pegawai.pendidikan_terakhir }}</td>
+                        </tr>
+                        <tr>
+                            <th>PERGURUAN D3 :</th>
+                            <td>{{ pegawai.perguruan_d3 }}</td>
+                        </tr>
+                        <tr>
+                            <th>BIDANG D3:</th>
+                            <td>{{ pegawai.bidang_d3 }}</td>
+                        </tr>
+                        <tr>
+                            <th>PERGURUAN TINGGI S1:</th>
+                            <td>{{ pegawai.perguruan_tinggi_d4_s1 }}</td>
+                        </tr>
+                        <tr>
+                            <th>BIDANG S1:</th>
+                            <td>{{ pegawai.bidang_d4_s1 }}</td>
+                        </tr>
+                        <tr>
+                            <th>PERGURUAN TINGGI S2 :</th>
+                            <td>{{ pegawai.perguruan_tinggi_sp1_s2 }}</td>
+                        </tr>
+                        <tr>
+                            <th>BIDANG S2:</th>
+                            <td>{{ pegawai.bidang_sp1_s2 }}</td>
+                        </tr>
+                        <tr>
+                            <th>PERGURUAN TINGGI S3:</th>
+                            <td>{{ pegawai.perguruan_tinggi_sp2_s3 }}</td>
+                        </tr>
+                        <tr>
+                            <th>BIDANG S3:</th>
+                            <td>{{ pegawai.bidang_sp2_s3 }}</td>
+                        </tr>
+                        <tr>
+                            <th>MASA BERLAKU:</th>
+                            <td>{{ pegawai.masa_berlaku }}</td>
+                        </tr>
+                        <tr>
+                            <th>ORGANISASI PROFESI:</th>
+                            <td>{{ pegawai.organisasi_profesi }}</td>
+                        </tr>
+                        <tr>
+                            <th>KURUN WAKTU:</th>
+                            <td>{{ pegawai.kurun_waktu }}</td>
+                        </tr>
+                        <tr>
+                            <th>TINGKAT:</th>
+                            <td>{{ pegawai.tingkat }}</td>
+                        </tr>
+                        
+                       
+                        
+                        {% endfor %}  
+                    </tbody>
+                </table>
+            </div>
+            <a href="/pegawaikeluarga"class="btn btn-danger">Kembali</a>
+        </div>
+    </div>
+
+{% endblock content %}

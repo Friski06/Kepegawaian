@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+    
+{% block content %}
+<div class="container-fluid">
+
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Data Keluarga
+        <a href="{% url 'tambah_pegawai_keluarga' %}"class="btn btn-primary">Tambah</a>
+    </h1>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Data Keluarga Pegawai</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+            {% for message in messages %}
+            {% if message %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endif %}
+            {% endfor %}
+            <table class="table table-bordered" id="dataTable" width="150%" cellspacing="1">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Nip</th>
+                    <th>Nama Pasangan</th>
+                    <th>Tempat Lahir</th>
+                    <th>Tanggal Lahir</th>
+                    <th>Anak Pertama</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Tanggal Lahir</th>
+                    <th>Jumlah Anak</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pegawai in pegawai %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ pegawai.nama }}</td>
+                    <td>{{ pegawai.nip }}</td>
+                    <td>{{ pegawai.nama_pasangan }}</td>
+                    <td>{{ pegawai.tempat_lahir }}</td>
+                    <td>{{ pegawai.tgl_lahir }}</td>
+                    <td>{{ pegawai.anak1 }}</td>
+                    <td>{{ pegawai.jk4 }}</td>
+                    <td>{{ pegawai.tgl_lahir_a1 }}</td>
+                    <td>{{ pegawai.jumlah_anak }}</td>
+                    
+                    <td>
+                        <center>
+                            <a href="{% url 'ubah_pegawaikeluarga' pegawai.id %}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'detail_pegawaikeluarga' %}" class="btn btn-primary"><i class="fas fa-info-square"></i></a>
+                            <!-- Button trigger modal -->
+                            <button data-toggle="modal" data-target="#hapus-{{ pegawai.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </center>
+                    </td>
+                    <div class="modal" id="hapus-{{ pegawai.id }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">Hapus</h3>
+                                </div>
+                                <div class="modal-body">
+                                    Apakah anda yakin ingin menghapus?
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{% url 'hapus_pegawaikeluarga' pegawai.id %}" class="btn btn-danger">Hapus</a>
+                                    <button class="btn btn-dark" data-dismiss="modal">Tidak</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tr>
+                {% endfor %}
+            </tbody>
+           </table> 
+        </div>
+    </div>
+</div>
+   </div>
+
+{% endblock content %}
+    
+
+
+

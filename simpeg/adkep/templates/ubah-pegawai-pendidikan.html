@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-2">
+    </div>
+    
+            <div class="card" style="width:60%; margin-bottom: 100px  ">
+                <div class="card-body">
+    
+                    {% for message in messages %}
+                    {% if message %}
+                    <div class="alert alert-success">{{ message }}</div>
+                    {% endif %}
+                    {% endfor %}
+        
+                    {% if pesan %}
+                    <div class="alert alert-success">{{ pesan }}</div>
+                    {% endif %}
+                    <form action="{% url 'ubah_pegawaipendidikan' pegawai.id %}"method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                    
+                        <button class="btn btn-primary">Simpan</button>
+                        <a href="/pegawaipendidikan"class="btn btn-danger">Kembali</a>
+                    </form>
+                </div>
+            </div>
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+
+{% endblock content %}

@@ -1,24 +1,23 @@
 {% extends 'base.html' %}
     
 {% block content %}
-    <center>
-        <h1>SIMPEG</h1>
-    </center>
-
+<div class="container-fluid">
     <h2>
         Data SPT
         <a href="{% url 'tambah_spt' %}"class="btn btn-primary">Tambah</a>
     </h2>
-  
-   <div class="container">
-    <div class="row">
-        <div class="col-md-12">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Data Cuti Izin</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
             {% for message in messages %}
             {% if message %}
             <div class="alert alert-success">{{ message }}</div>
             {% endif %}
             {% endfor %}
-           <table class="table table-bordered table-striped">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
                     <th>Nama</th>
@@ -67,6 +66,7 @@
                 {% endfor %}
             </tbody>
            </table> 
+        </div>
         </div>
     </div>
    </div>

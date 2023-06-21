@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+    
+{% block content %}
+<div class="container-fluid">
+
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Data Pekerjaan
+        <a href="{% url 'tambah_pegawai_pekerjaan' %}"class="btn btn-primary">Tambah</a>
+    </h1>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Data Pekerjaan Pegawai</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+            {% for message in messages %}
+            {% if message %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endif %}
+            {% endfor %}
+            <table class="table table-bordered" id="dataTable" width="150%" cellspacing="1">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Nip</th>
+                    <th>Mulai Kerja</th>
+                    <th>Lama Bekerja</th>
+                    <th>Jenis Pegawai</th>
+                    <th>Status Pekerjaan</th>
+                    <th>Posisi</th>
+                    <th>Program Studi</th>
+                    <th>Jabatan Struktural</th>
+                    <th>Jabatan Fungsional</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pegawai in pegawai %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ pegawai.nama }}</td>
+                    <td>{{ pegawai.nip }}</td>
+                    <td>{{ pegawai.mulai_kerja }}</td>
+                    <td>{{ pegawai.lama_kerja }}</td>
+                    <td>{{ pegawai.pegawai }}</td>
+                    <td>{{ pegawai.status }}</td>
+                    <td>{{ pegawai.posisi }}</td>
+                    <td>{{ pegawai.program_studi }}</td>
+                    <td>{{ pegawai.jabatanstruktural }}</td>
+                    <td>{{ pegawai.jabatan_fungsional }}</td>
+                    <td>
+                        <center>
+                            <a href="{% url 'ubah_pegawaipekerjaan' pegawai.id %}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'detail_pegawaipekerjaan' %}" class="btn btn-primary"><i class="fas fa-info-square"></i></a>
+                            <!-- Button trigger modal -->
+                            <button data-toggle="modal" data-target="#hapus-{{ pegawai.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </center>
+                    </td>
+                    <div class="modal" id="hapus-{{ pegawai.id }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">Hapus</h3>
+                                </div>
+                                <div class="modal-body">
+                                    Apakah anda yakin ingin menghapus?
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{% url 'hapus_pegawaipekerjaan' pegawai.id %}" class="btn btn-danger">Hapus</a>
+                                    <button class="btn btn-dark" data-dismiss="modal">Tidak</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tr>
+                {% endfor %}
+            </tbody>
+           </table> 
+        </div>
+    </div>
+</div>
+   </div>
+
+{% endblock content %}
+    
+
+
+

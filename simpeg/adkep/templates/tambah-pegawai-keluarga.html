@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-2">
+    </div>
+    <div class="card" style="width:60%; margin-bottom: 100px  ">
+        <div class="card-body">
+            <h2>
+                Data Keluarga
+            </h2>
+            {% if pesan %}
+            <div class="alert alert-success">{{ pesan }}</div>
+            {% endif %}
+            <form action="/tambah-pegawai-keluarga/"method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+            
+                <button class="btn btn-primary">Tambah Pegawai</button>
+                <a href="/pegawaikeluarga"class="btn btn-danger">Kembali</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,18 +1,13 @@
 from django.contrib import admin
-from adkep.models import Pegawai, Absen
+
 # Register your models here.
+from .models import JabatanStruktural, PegawaiPribadi, PegawaiPekerjaan, PegawaiPendidikan, PegawaiKeluarga, PegawaiBank, Provinsi, Kabupaten
 
-class PegawaiAdmin(admin.ModelAdmin):
-    list_display = ['nama', 'nrp', 'email', 'alamat', 'absen_id', 'hp', 'jabatan']
-    search_fields = ['nama', 'nrp']
-    list_filter = ['absen_id']
-    list_per_page = 5
-
-
-class AbsenAdmin(admin.ModelAdmin):
-    list_display = ['status', 'keterangan']
-    search_fields = ['status']
-    list_per_page = 5
-
-admin.site.register(Pegawai, PegawaiAdmin)
-admin.site.register(Absen, AbsenAdmin)
+admin.site.register(JabatanStruktural)
+admin.site.register(PegawaiPribadi)
+admin.site.register(PegawaiPekerjaan)
+admin.site.register(PegawaiPendidikan)
+admin.site.register(PegawaiKeluarga)
+admin.site.register(PegawaiBank)
+admin.site.register(Provinsi)
+admin.site.register(Kabupaten)

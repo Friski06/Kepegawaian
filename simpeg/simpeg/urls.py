@@ -3,19 +3,63 @@ from django.contrib import admin
 from django.urls import path
 from adkep.views import *
 from perizinan.views import *
+from penilaian.views import *
+from absen.views import *
+from dashboard.views import *
+from login.views import *
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('datapegawai/', datapegawai, name='datapegawai'),
-    path('dataabsen/', dataabsen, name='dataabsen'),
-    path('tambah-pegawai/', tambah_pegawai,name='tambah_pegawai'),
-    path('pegawai/ubah/<int:id_pegawai>', ubah_pegawai, name='ubah_pegawai'),
-    path('pegawai/hapus/<int:id_pegawai>', hapus_pegawai, name='hapus_pegawai'),
-    path('tambah-absen/', tambah_absen, name='tambah_absen'),
-    path('absen/ubah/<int:id_absen>', ubah_absen, name='ubah_absen'),
-    path('absen/hapus/<int:id_absen>', hapus_absen, name='hapus_absen'),
+    path('dashboard/',dashboard, name='dashboard'),
+    path('login/', login, name='login'),
+    path('logout/', logout_view, name='logout_view'),
+    path('register/', register, name='register'),
+    path('forgot_password/', forgot_password, name='forgot_password'),
+#{
+    #pegawaipribadi
+    path('pegawaipribadi/', pegawaipribadi, name='pegawaipribadi'),
+    path('tambah-pegawai-pribadi/', tambah_pegawai_pribadi, name='tambah_pegawai_pribadi'),
+    path('pegawaipribadi/ubah/<int:id_pegawaipribadi>', ubah_pegawai_pribadi, name='ubah_pegawaipribadi'),
+    path('pegawaipribadi/hapus/<int:id_pegawaipribadi>', hapus_pegawai_pribadi, name='hapus_pegawaipribadi'),
+    path('detail-pegawaipribadi/detail/<int:id>/', detail_pegawai_pribadi, name='detail_pegawaipribadi'),
 
+    #pegawai pekerjaan
+    path('pegawaipekerjaan/', pegawaipekerjaan, name='pegawaipekerjaan'),
+    path('tambah-pegawai-pekerjaan/', tambah_pegawai_pekerjaan, name='tambah_pegawai_pekerjaan'),
+    path('pegawaipekerjaan/ubah/<int:id_pegawaipekerjaan>', ubah_pegawai_pekerjaan, name='ubah_pegawaipekerjaan'),
+    path('pegawaipekerjaan/hapus/<int:id_pegawaipekerjaan>', hapus_pegawai_pekerjaan, name='hapus_pegawaipekerjaan'),
+    path('detail-pegawaipekerjaan/', detail_pegawai_pekerjaan, name='detail_pegawaipekerjaan'),
+
+    #pegawai pendidikan
+    path('pegawaipendidikan/', pegawaipendidikan, name='pegawaipendidikan'),
+    path('tambah-pegawai-pendidikan/', tambah_pegawai_pendidikan, name='tambah_pegawai_pendidikan'),
+    path('pegawaipendidikan/ubah/<int:id_pegawaipendidikan>', ubah_pegawai_pendidikan, name='ubah_pegawaipendidikan'),
+    path('pegawaipendidikan/hapus/<int:id_pegawaipendidikan>', hapus_pegawai_pendidikan, name='hapus_pegawaipendidikan'),
+    path('detail-pegawaipendidikan/', detail_pegawai_pendidikan, name='detail_pegawaipendidikan'),
+
+    #pegawai kelaurga
+    path('pegawaikeluarga/', pegawaikeluarga, name='pegawaikeluarga'),
+    path('tambah-pegawai-keluarga/', tambah_pegawai_keluarga, name='tambah_pegawai_keluarga'),
+    path('pegawaikeluarga/ubah/<int:id_pegawaikeluarga>', ubah_pegawai_keluarga, name='ubah_pegawaikeluarga'),
+    path('pegawaikeluarga/hapus/<int:id_pegawaikeluarga>', hapus_pegawai_keluarga, name='hapus_pegawaikeluarga'),
+    path('detail-pegawaikeluarga/', detail_pegawai_keluarga, name='detail_pegawaikeluarga'),
+
+    #pegawai bank
+    path('pegawaibank/', pegawaibank, name='pegawaibank'),
+    path('tambah-pegawai-bank/', tambah_pegawai_bank, name='tambah_pegawai_bank'),
+    path('pegawaibank/ubah/<int:id_pegawaibank>', ubah_pegawai_bank, name='ubah_pegawaibank'),
+    path('pegawaibank/hapus/<int:id_pegawaibank>', hapus_pegawai_bank, name='hapus_pegawaibank'),
+#}
+#{
+    #absen
+    path('lupaabsen/', lupaabsen, name='lupaabsen'),
+    path('absen/', absen, name='absen'),
+    path('detailabsen/', detailabsen, name='detailabsen'),
+    path('rekap_absen_bulanan/', rekap_absen_bulanan, name='rekapabsen'),
+# }
+
+    #linkcutiizin&spt
     path('cutiizin/', cutiizin, name='cutiizin'),
     path('spt/', spt, name='spt'),
     path('tambah-cutiizin/', tambah_cutiizin,name='tambah_cutiizin'),
@@ -24,5 +68,8 @@ urlpatterns = [
     path('spt/ubah/<int:id_spt>', ubah_spt, name='ubah_spt'),
     path('cuti/hapus/<int:id_cuti>', hapus_cuti, name='hapus_cuti'),
     path('spt/hapus/<int:id_spt>', hapus_spt, name='hapus_spt'),
+    #penilaian
+    path('nilai/', nilai, name='nilai'),
+    path('tolakukur/', tolakukur, name='tolakukur')
 
 ]
