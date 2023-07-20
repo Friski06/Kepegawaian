@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+    
+{% block content %}
+   <!-- Begin Page Content -->
+   <div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Absen</h1>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Data Absen</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Nip</th>
+                            <th>Tanggal</th>
+                            <th>Jam Masuk</th>
+                            <th>Jam Pulang</th>
+                            
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for absen in absen %}
+                        <tr>
+                            <td>{{ absen.nama }}</td>
+                            <td>{{ absen.nip }}</td>
+                            <td>{{ absen.tanggal }}</td>
+                            <td>{{ absen.masuk }}</td>
+                            <td>{{ absen.pulang}}</td>
+                            <td>
+                                <center>
+                                    <a href="#" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                    <a href="#" class="btn btn-primary"><i class="fas fa-info-square"></i></a>
+                                    <!-- Button trigger modal -->
+                                    <button data-toggle="modal" data-target="#hapus-{{ absen.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                </center>
+                            </td>
+                            <div class="modal" id="hapus-{{ absen.id }}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title">Hapus</h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            Apakah anda yakin ingin menghapus?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="#" class="btn btn-danger">Hapus</a>
+                                            <button class="btn btn-dark" data-dismiss="modal">Tidak</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
+    
+
+
+

@@ -59,25 +59,45 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-user"></i>
-                    <span>Data Pegawai</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Data :</h6>
-                        <a class="collapse-item" href="{% url 'pegawaipribadi' %}">Data Pribadi</a>
-                        <a class="collapse-item" href="{% url 'pegawaipendidikan' %}">Data Pendidikan</a>
-                        <a class="collapse-item" href="{% url 'pegawaipekerjaan' %}">Data Pekerjaan</a>
-                        <a class="collapse-item" href="{% url 'pegawaikeluarga' %}">Data Keluarga</a>
-                        <a class="collapse-item" href="{% url 'pegawaibank' %}">Data Bank</a>
-                    </div>
-                </div>
-            </li>
-
+            {% if user.is_superuser or user.user_type == 'admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                            aria-expanded="true" aria-controls="collapseTwo">
+                            <i class="fas fa-user"></i>
+                            <span>Data Pegawai</span>
+                        </a>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <h6 class="collapse-header">Data:</h6>
+                                <a class="collapse-item" href="{% url 'pegawaipribadi' %}">Data Pribadi</a>
+                                <a class="collapse-item" href="{% url 'pegawaipendidikan' %}">Data Pendidikan</a>
+                                <a class="collapse-item" href="{% url 'pegawaipekerjaan' %}">Data Pekerjaan</a>
+                                <a class="collapse-item" href="{% url 'pegawaikeluarga' %}">Data Keluarga</a>
+                                <a class="collapse-item" href="{% url 'pegawaibank' %}">Data Bank</a>
+                            </div>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                            aria-expanded="true" aria-controls="collapseTwo">
+                            <i class="fas fa-user"></i>
+                            <span>Data Pegawai</span>
+                        </a>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <h6 class="collapse-header">Data:</h6>
+                                <a class="collapse-item" href="{% url 'user_pegawaipribadi' %}">Data Pribadi</a>
+                                <a class="collapse-item" href="{% url 'user_pegawaipendidikan' %}">Data Pendidikan</a>
+                                <a class="collapse-item" href="{% url 'user_pegawaipekerjaan' %}">Data Pekerjaan</a>
+                                <a class="collapse-item" href="{% url 'user_pegawaikeluarga' %}">Data Keluarga</a>
+                                <a class="collapse-item" href="{% url 'user_pegawaibank' %}">Data Bank</a>
+                            </div>
+                        </div>
+                    </li>
+                {% endif %}
             <!-- Nav Item - Utilities Collapse Menu -->
+            {% if user.is_superuser or user.user_type == 'kaunit' %}
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
@@ -95,7 +115,25 @@
                     </div>
                 </div>
             </li>
-
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-user-clock"></i>
+                    <span>Data Absen</span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Absen:</h6>
+                        <a class="collapse-item" href="{% url 'absen_user' %}">Data Absen</a>
+                        <a class="collapse-item" href="{% url 'lupaabsen' %}">Lupa Absen</a>
+                        <a class="collapse-item" href="#">Izin Absen</a>
+                        <a class="collapse-item" href="{% url 'rekapabsen_user' %}">Rekap Absen</a>
+                    </div>
+                </div>
+            </li>
+            {% endif %}
             <!-- Divider -->
             <hr class="sidebar-divider">
 

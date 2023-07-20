@@ -1,94 +1,111 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Detail Pekerjaan</h2>
-                <table class="table table-bordered">
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-2">
+    </div>
+    <div class="card" style="width:70%; margin-bottom: 100px">
+        <div class="card-body">
+            <h2>Detail Pegawai Pekerjaan</h2>
+            <div class="row">
+                <div class="col-md-4">
                     {% for pegawai in pegawai %}
-                    <tbody>
-                        <tr>
-                            <th>MULAI BEKERJA:</th>
-                            <td>{{ pegawai.mulai_kerja }}</td>
-                        </tr>
-                        <tr>
-                            <th>WAKTU LAMA BEKERJA:</th>
-                            <td>{{ pegawai.lama_kerja }}</td>
-                        </tr>
-                        <tr>
-                            <th>JENIS PEGAWAI:</th>
-                            <td>{{ pegawai.pegawai }}</td>
-                        </tr>
-                        <tr>
-                            <th>STATUS JABATAN:</th>
-                            <td>{{ pegawai.status }}</td>
-                        </tr>
-                        <tr>
-                            <th>POSISI JABATAN:</th>
-                            <td>{{ pegawai.posisi }}</td>
-                        </tr>
-                        <tr>
-                            <th>UNIT:</th>
-                            <td>{{ pegawai.unit }}</td>
-                        </tr>
-                        <tr>
-                            <th>PORGRAM STUDI:</th>
-                            <td>{{ pegawai.program_studi }}</td>
-                        </tr>
-                        <tr>
-                            <th>TANGGAL BERHENTI KERJA:</th>
-                            <td>{{ pegawai.berhenti_kerja }}</td>
-                        </tr>
-                        <tr>
-                            <th>ALASAN BERHENTI KERJA:</th>
-                            <td>{{ pegawai.alasan }}</td>
-                        </tr>
-                        <tr>
-                            <th>JABATAN STRUKTURAL:</th>
-                            <td>{{ pegawai.jabatanstruktural }}</td>
-                        </tr>
-                        <tr>
-                            <th>TMT:</th>
-                            <td>{{ pegawai.tmt }}</td>
-                        </tr>
-                        <tr>
-                            <th>TST:</th>
-                            <td>{{ pegawai.tst }}</td>
-                        </tr>
-                        <tr>
-                            <th>NIDN/NUP/NITK/NIDK:</th>
-                            <td>{{ pegawai.NIDN_NUP_NITL_NIDK }}</td>
-                        </tr>
-                        <tr>
-                            <th>JABATAN FUNGSIONAL:</th>
-                            <td>{{ pegawai.jabatan_fungsional }}</td>
-                        </tr>
-                        <tr>
-                            <th>GOLONGAN:</th>
-                            <td>{{ pegawai.gol }}</td>
-                        </tr>
-                        <tr>
-                            <th>SERTIFIKASI DOSEN:</th>
-                            <td>
-                                {% if pegawai.sertifikasi_dosen %}
-                                    <img src="{{ pegawai.sertifikasi_dosen.url }}" alt="Sertifikasi Dosen">
-                                {% else %}
-                                    Tidak ada sertifikasi dosen
-                                {% endif %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>NOMOR SERTIFIKASI DOSEN:</th>
-                            <td>{{ pegawai.no_sertifikasi_dosen }}</td>
-                        </tr>
-                        
-                        {% endfor %}  
-                    </tbody>
-                </table>
+                    {% if pegawai.sertifikasi_dosen %}
+                        <div class="text-center">
+                            <img src="{{ pegawai.sertifikasi_dosen.url }}" alt="Foto Pegawai" class="img-fluid">
+                        </div>
+                    {% else %}
+                        <div class="text-center">
+                            Foto tidak tersedia.
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th>NAMA:</th>
+                                <td>{{ pegawai.nama }}</td>
+                            </tr>
+                            <tr>
+                                <th>NIP:</th>
+                                <td>{{ pegawai.nip }}</td>
+                            </tr>
+                            <tr>
+                                <th>MULAI BEKERJA:</th>
+                                <td>{{ pegawai.mulai_kerja }}</td>
+                            </tr>
+                            <tr>
+                                <th>WAKTU LAMA BEKERJA:</th>
+                                <td>{{ pegawai.lama_kerja }}</td>
+                            </tr>
+                            <tr>
+                                <th>JENIS PEGAWAI:</th>
+                                <td>{{ pegawai.pegawai }}</td>
+                            </tr>
+                            <tr>
+                                <th>STATUS JABATAN:</th>
+                                <td>{{ pegawai.status }}</td>
+                            </tr>
+                            <tr>
+                                <th>POSISI JABATAN:</th>
+                                <td>{{ pegawai.posisi }}</td>
+                            </tr>
+                            <tr>
+                                <th>UNIT:</th>
+                                <td>{{ pegawai.unit }}</td>
+                            </tr>
+                            <tr>
+                                <th>PORGRAM STUDI:</th>
+                                <td>{{ pegawai.program_studi }}</td>
+                            </tr>
+                            <tr>
+                                <th>TANGGAL BERHENTI KERJA:</th>
+                                <td>{{ pegawai.berhenti_kerja }}</td>
+                            </tr>
+                            <tr>
+                                <th>ALASAN BERHENTI KERJA:</th>
+                                <td>{{ pegawai.alasan }}</td>
+                            </tr>
+                            <tr>
+                                <th>JABATAN STRUKTURAL:</th>
+                                <td>{{ pegawai.jabatan }}</td>
+                            </tr>
+                            <tr>
+                                <th>TMT:</th>
+                                <td>{{ pegawai.tmt }}</td>
+                            </tr>
+                            <tr>
+                                <th>TST:</th>
+                                <td>{{ pegawai.tst }}</td>
+                            </tr>
+                            <tr>
+                                <th>NIDN/NUP/NITK/NIDK:</th>
+                                <td>{{ pegawai.NIDN_NUP_NITL_NIDK }}</td>
+                            </tr>
+                            <tr>
+                                <th>JABATAN FUNGSIONAL:</th>
+                                <td>{{ pegawai.jabatan_fungsional }}</td>
+                            </tr>
+                            <tr>
+                                <th>GOLONGAN:</th>
+                                <td>{{ pegawai.gol }}</td>
+                            </tr>
+                            <tr>
+                                <th>NOMOR SERTIFIKASI DOSEN:</th>
+                                <td>{{ pegawai.no_sertifikasi_dosen }}</td>
+                            </tr>
+                        </tbody>
+                        {% endfor %}
+                    </table>
+                </div>
             </div>
-            <a href="/pegawaipekerjaan"class="btn btn-danger">Kembali</a>
+            <a href="/pegawaipribadi" class="btn btn-danger">Kembali</a>
         </div>
     </div>
+
+</div>
 
 {% endblock content %}

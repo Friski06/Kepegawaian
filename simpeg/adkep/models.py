@@ -1,55 +1,14 @@
 from django.db import models
-
+from django.contrib.auth.models import User
+from django.conf import settings
 # Create your models here.
 
 class JabatanStruktural(models.Model):
-    JBTN_CHOICES = [
-        ('Admin Kepegawaian', 'ADMIN KEPEGAWAIAN'),
-        ('Direktur', 'DIREKTUR'),
-        ('Wakil Direktur I', 'WADIR'),
-        ('Wakil Direktur II', 'WADIRII'),
-        ('Ketua SPMI', 'KETUA_SPMI'),
-        ('Kabag/Ka. UPT', 'KABAG_KA_UPT'),
-        ('Kaprodi Elektronika', 'KAPRODI_ELEKTRO'),
-        ('Kaprodi Teknologi Informasi', 'KAPRODI_TEKNOLOGI_INFORMASI'),
-        ('Kaprodi Mekatronika', 'KAPRODI_MEKATRONIKA'),
-        ('Kaprodi Akutansi', 'KAPRODIAKUTANSI'),
-        ('Kaprodi Akutansi Sektor Publik', 'KAPRODI_AKUTANSI_SEKTORPUBLIK'),
-        ('Admin Pustaka', 'ADMINPUSTAKA'),
-        ('Admin Akademik', 'ADMIN AKADEMIK'),
-        ('Admin Pembelajaran', 'ADMIN PEMBELAJARAN'),
-        ('Admin Kemahasiswaan', 'ADMIN KEMAHASISWAAN'),
-        ('Sekretaris Prodi Teknologi Informasi', 'SEKPRODI'),
-        ('Sekretaris Prodi Elektronika', 'SEKPRODI'),
-        ('Sekretaris Prodi Mekatronika', 'SEKPRODI'),
-        ('Sekretaris Prodi Akutansi', 'SEKPRODI'),
-        ('Sekretaris Prodi Akutansi Sektor Publik', 'SEKPRODI'),
-        ('Ka Lab Teknologi Informasi', 'KA_LAB'),
-        ('Ka Lab Elektronika', 'KA_LAB'),
-        ('Ka Lab Mekatronika', 'KA_LAB'),
-        ('Ka Lab Akutansi', 'KA_LAB'),
-        ('Ka Lab Akutansi Sektor Publik', 'KA_LAB'),
-        ('Penata LK', 'PENATA_LK'),
-        ('Bendahara', 'BENDAHARA'),
-        ('Kepala Unit', 'KA_UNIT'),
-        ('Sekretaris Direktur', 'SEKETARIS_DIREKTUR'),
-        ('Operator PT', 'OPERATOR_PT'),
-        ('Kepala Asrama', 'KEPALA_ASRAMA'),
-        ('Dosen Teknologi Informasi', 'DOSEN'),
-        ('Dosen Elektronika', 'DOSEN'),
-        ('Dosen Mekatronika', 'DOSEN'),
-        ('Dosen Akutansi', 'DOSEN'),
-        ('Dosen Akutansi Sektor Publik', 'DOSEN'),
-        ('Staf', 'STAF'),
-        ('Teknisi', 'TEKNISI')
-    ]
-    nama_jabatan = models.CharField(choices=JBTN_CHOICES, max_length=50)
-    STS_CHOICES = [
-        ('TETAP', 'Tetap'),
-        ('HONOR', 'Honor'),
-    ]
-    status_jabatan = models.CharField(choices=STS_CHOICES, max_length=10)
-
+    
+    nama_jabatan = models.CharField(max_length=100)
+    id_atasan = models.CharField(max_length=20, blank=True)
+    id_bawahan = models.CharField(max_length=100,blank=True)
+    
     def __str__(self):
         return self.nama_jabatan
     
@@ -68,44 +27,9 @@ class Kabupaten(models.Model):
     provinsi_id = models.ForeignKey(Provinsi, on_delete=models.CASCADE, null=True)
     def __str__(self):
         return self.nama_kabupaten
-    
-#pribadi
-class PegawaiPribadi(models.Model):
-    foto = models.ImageField(upload_to='pegawai/', null=True, blank=True)
-    nama = models.CharField(max_length=40)
-    nrp_kontrak = models.CharField(max_length=20)
-    nrp_tetap = models.CharField(max_length=20)
-    nip = models.CharField(max_length=20)
-    gelar = models.CharField(max_length=20)
-    JENIS_KELAMIN_CHOICES = [
-        ('L', 'Laki-laki'),
-        ('P', 'Perempuan'),
-    ]
-    jenis_kelamin = models.CharField(choices=JENIS_KELAMIN_CHOICES, max_length=1)
-    tgl_lahir = models.DateField()
-    GOLONGAN_DARAH_CHOICES = [
-        ('A', 'A'),
-        ('B', 'B'),
-        ('AB', 'AB'),
-        ('O', 'O'),
-    ]
-    gol_darah = models.CharField(choices=GOLONGAN_DARAH_CHOICES, max_length=2)
-    agama = models.CharField(max_length=20)
-    jalan = models.CharField(max_length=50)
-    nmr_rumah = models.CharField(max_length=10)
-    desa = models.CharField(max_length=50)
-    kecamatan = models.CharField(max_length=50)
-    kabupaten = models.CharField(max_length=50)
-    provinsi = models.CharField(max_length=50)
-    kode_pos = models.CharField(max_length=10)
-    tlp_rumah = models.CharField(max_length=20)
-    hp = models.CharField(max_length=20)
-    email = models.EmailField()    
 
-    def __str__(self):
-        return self.nama
 
-#pekerjaan
+ #pekerjaan
 class PegawaiPekerjaan(models.Model):
     nama = models.CharField(max_length=40, null=True)
     nip = models.CharField(max_length=20,null= True)
@@ -166,8 +90,7 @@ class PegawaiPekerjaan(models.Model):
     gol = models.CharField(max_length=10, null=True, blank=True)
     sertifikasi_dosen = models.ImageField(upload_to='pegawaipekerjaan/', null=True, blank=True)
     no_sertifikasi_dosen = models.CharField(max_length=20, null=True, blank=True)
-    jabatanstruktural = models.ForeignKey(JabatanStruktural, on_delete=models.CASCADE, default=1)
-    
+    jabatan = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return f"Pegawai Pekerjaan: {self.id}"
@@ -177,20 +100,14 @@ class PegawaiPendidikan(models.Model):
     nama = models.CharField(max_length=40,null=True)
     nip = models.CharField(max_length=20, null=True)
     pendidikan_terakhir = models.CharField(max_length=50)
-    perguruan_d3 = models.CharField(max_length=100, null=True, blank=True)
-    bidang_d3 = models.CharField(max_length=100, null=True, blank=True)
-    perguruan_tinggi_d4_s1 = models.CharField(max_length=100, null=True, blank=True)
-    bidang_d4_s1 = models.CharField(max_length=100, null=True, blank=True)
-    perguruan_tinggi_sp1_s2 = models.CharField(max_length=100, null=True, blank=True)
-    bidang_sp1_s2 = models.CharField(max_length=100, null=True, blank=True)
-    perguruan_tinggi_sp2_s3 = models.CharField(max_length=100, null=True, blank=True)
-    bidang_sp2_s3 = models.CharField(max_length=100, null=True, blank=True)
+    perguruan = models.CharField(max_length=100, null=True, blank=True)
+    bidang = models.CharField(max_length=100, null=True, blank=True)
     sertifikat_keahlian = models.ImageField(upload_to='pegawaipendidikan/', null=True, blank=True)
     masa_berlaku = models.DateField(null=True, blank=True)
     organisasi_profesi = models.CharField(max_length=100, null=True, blank=True)
     kurun_waktu = models.CharField(max_length=100, null=True, blank=True)
     tingkat = models.CharField(max_length=100, null=True, blank=True)
-
+    
     def __str__(self):
         return f"Pegawai Pendidikan: {self.id}"
     
@@ -216,7 +133,7 @@ class PegawaiKeluarga(models.Model):
     jk8 = models.CharField(choices=JENIS_KELAMIN_CHOICES, max_length=1, null=True, blank=True)
     tgl_lahir_a3 = models.DateField(null=True, blank=True)
     jumlah_anak = models.PositiveIntegerField(null=True, blank=True)
-
+    
     def __str__(self):
         return f"Pegawai Keluarga: {self.id}"
     
@@ -233,4 +150,44 @@ class PegawaiBank(models.Model):
     no_bpjs_kesehatan = models.CharField(max_length=20, null=True, blank=True)
 
     def __str__(self):
-        return f"Pegawai Bank: {self.id}"
+        return f"Pegawai Bank: {self.id}" 
+
+#pribadi
+class PegawaiPribadi(models.Model):
+    foto = models.ImageField(upload_to='pegawai/', null=True, blank=True)
+    nama = models.CharField(max_length=40)
+    nrp_kontrak = models.CharField(max_length=20)
+    nrp_tetap = models.CharField(max_length=20)
+    nip = models.CharField(max_length=20)
+    gelar = models.CharField(max_length=20)
+    JENIS_KELAMIN_CHOICES = [
+        ('L', 'Laki-laki'),
+        ('P', 'Perempuan'),
+    ]
+    jenis_kelamin = models.CharField(choices=JENIS_KELAMIN_CHOICES, max_length=1)
+    tgl_lahir = models.DateField()
+    GOLONGAN_DARAH_CHOICES = [
+        ('A', 'A'),
+        ('B', 'B'),
+        ('AB', 'AB'),
+        ('O', 'O'),
+    ]
+    gol_darah = models.CharField(choices=GOLONGAN_DARAH_CHOICES, max_length=2)
+    agama = models.CharField(max_length=20)
+    jalan = models.CharField(max_length=50)
+    nmr_rumah = models.CharField(max_length=10)
+    desa = models.CharField(max_length=50)
+    kecamatan = models.CharField(max_length=50)
+    kabupaten = models.CharField(max_length=50)
+    provinsi = models.CharField(max_length=50)
+    kode_pos = models.CharField(max_length=10)
+    tlp_rumah = models.CharField(max_length=20)
+    hp = models.CharField(max_length=20)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,primary_key=True)
+    pekerjaan = models.ForeignKey(PegawaiPekerjaan, on_delete=models.CASCADE, null=True, blank=True)
+    pendidikan = models.ForeignKey(PegawaiPendidikan, on_delete=models.CASCADE, null=True, blank=True)
+    
+    def __str__(self):
+        return self.nama
+
+    

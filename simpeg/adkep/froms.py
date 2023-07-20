@@ -1,6 +1,13 @@
 from django.forms import ModelForm
 from django import forms
 from adkep.models import JabatanStruktural, PegawaiPribadi, PegawaiPekerjaan, PegawaiPendidikan, PegawaiKeluarga, PegawaiBank, Provinsi, Kabupaten
+from perizinan.models import  Jabatan
+
+class JabatanForm(ModelForm):
+    class Meta:
+        model = Jabatan
+        fields = '__all__'
+
 
 class JabatanStrukturalForm(ModelForm):
     class Meta:
@@ -51,8 +58,7 @@ class PegawaiPribadiForm(ModelForm):
 
     class Meta:
         model = PegawaiPribadi
-        fields = '__all__'
-
+        exclude = ['user', 'pekerjaan','pendidikan']
 class PegawaiPekerjaanForm(ModelForm):
     
     PEGAWAI_CHOICES = [
@@ -113,34 +119,28 @@ class PegawaiPekerjaanForm(ModelForm):
     NIDN_NUP_NITL_NIDK = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     jabatan_fungsional = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     gol = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    sertifikasi_dosen = forms.ImageField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
+    sertifikasi_dosen = forms.ImageField(required=False, widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
     no_sertifikasi_dosen = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    jabatanstruktural = forms.ModelChoiceField(queryset=JabatanStruktural.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
+    jabatan = forms.ModelChoiceField(queryset=JabatanStruktural.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
 
     class Meta:
         model = PegawaiPekerjaan
         fields = '__all__'
 
 class PegawaiPendidikanForm(ModelForm):
-    nama = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    nama = forms.ModelChoiceField(queryset=PegawaiPribadi.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
     nip = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     pendidikan_terakhir = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    perguruan_d3 = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    bidang_d3 = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    perguruan_tinggi_d4_s1 = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    bidang_d4_s1 = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    perguruan_tinggi_sp1_s2 = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    bidang_sp1_s2 = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    perguruan_tinggi_sp2_s3 = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    bidang_sp2_s3 = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    sertifikat_keahlian = forms.ImageField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
+    perguruan = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    bidang= forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    sertifikat_keahlian = forms.ImageField(required=False, widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
     masa_berlaku = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     organisasi_profesi = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     kurun_waktu = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     tingkat = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     class Meta:
         model = PegawaiPendidikan
-        fields = '__all__'
+        exclude = ['pribadi']
 
 class PegawaiKeluargaForm(ModelForm):
     JENIS_KELAMIN_CHOICES = [

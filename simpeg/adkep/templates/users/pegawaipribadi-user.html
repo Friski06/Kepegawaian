@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-2">
+    </div>
+    <div class="card" style="width:70%; margin-bottom: 100px">
+        <div class="card-body">
+            <h2>Data Diri Pegawai
+                <a href="{% url 'tambah_pegawai_pribadi' %}"class="btn btn-primary">Tambah</a>
+            </h2>
+            <div class="row">
+                <div class="col-md-4">
+                    {% for pegawai in pegawai %}
+                    {% if pegawai.foto %}
+                        <div class="text-center">
+                            <img src="{{ pegawai.foto.url }}" alt="Foto Pegawai" class="img-fluid">
+                        </div>
+                    {% else %}
+                        <div class="text-center">
+                            Foto tidak tersedia.
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th>NAMA:</th>
+                                <td>{{ pegawai.nama }}</td>
+                            </tr>
+                            <tr>
+                                <th>EMAIL:</th>
+                                <td>{{ pegawai.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>NO HP:</th>
+                                <td>{{ pegawai.hp }}</td>
+                            </tr>
+                            <tr>
+                                <th>NRP KONTRAK:</th>
+                                <td>{{ pegawai.nrp_kontrak }}</td>
+                            </tr>
+                            <tr>
+                                <th>NRP TETAP:</th>
+                                <td>{{ pegawai.nrp_tetap }}</td>
+                            </tr>
+                            <tr>
+                                <th>NIP:</th>
+                                <td>{{ pegawai.nip }}</td>
+                            </tr>
+                            <tr>
+                                <th>GELAR:</th>
+                                <td>{{ pegawai.gelar }}</td>
+                            </tr>
+                            <tr>
+                                <th>JENIS KELAMIN:</th>
+                                <td>{{ pegawai.jenis_kelamin }}</td>
+                            </tr>
+                            <tr>
+                                <th>TANGGAL LAHIR:</th>
+                                <td>{{ pegawai.tgl_lahir }}</td>
+                            </tr>
+                            <tr>
+                                <th>GOLONGAN DARAH:</th>
+                                <td>{{ pegawai.gol_darah }}</td>
+                            </tr>
+                            <tr>
+                                <th>AGAMA:</th>
+                                <td>{{ pegawai.agama }}</td>
+                            </tr>
+                            <tr>
+                                <th>ALAMAT:</th>
+                                <td>{{ pegawai.jalan }}</td>
+                            </tr>
+                            <tr>
+                                <th>NOMOR RUMAH:</th>
+                                <td>{{ pegawai.nmr_rumah }}</td>
+                            </tr>
+                            <tr>
+                                <th>DESA:</th>
+                                <td>{{ pegawai.desa }}</td>
+                            </tr>
+                            <tr>
+                                <th>KECAMATAN:</th>
+                                <td>{{ pegawai.kecamatan }}</td>
+                            </tr>
+                            <tr>
+                                <th>KABUPATEN:</th>
+                                <td>{{ pegawai.kabupaten }}</td>
+                            </tr>
+                            <tr>
+                                <th>PROVINSI:</th>
+                                <td>{{ pegawai.provinsi }}</td>
+                            </tr>
+                            <tr>
+                                <th>KODE POS:</th>
+                                <td>{{ pegawai.kode_pos }}</td>
+                            </tr>
+                            <tr>
+                                <th>TELEPON RUMAH:</th>
+                                <td>{{ pegawai.tlp_rumah }}</td>
+                            </tr>
+                        </tbody>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            <a href="/dashboard" class="btn btn-danger">Kembali</a>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

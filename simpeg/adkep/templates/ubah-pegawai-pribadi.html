@@ -21,7 +21,7 @@
                     {% if pesan %}
                     <div class="alert alert-success">{{ pesan }}</div>
                     {% endif %}
-                    <form action="{% url 'ubah_pegawaipribadi' pegawai.id %}"method="post">
+                    <form action="{% url 'ubah_pegawaipribadi' pegawai.id %}"method="post"  enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form.as_p }}
                     

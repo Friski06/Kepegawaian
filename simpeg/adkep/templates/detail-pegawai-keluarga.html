@@ -1,65 +1,78 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Detail Pendidikan</h2>
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-2">
+    </div>
+    <div class="card" style="width:70%; margin-bottom: 100px">
+        <div class="card-body">
+                <h2>Detail Pasangan</h2>
                 <table class="table table-bordered">
                     {% for pegawai in pegawai %}
                     <tbody>
                         <tr>
-                            <th>PENDIDIKAN TERAKIR:</th>
-                            <td>{{ pegawai.pendidikan_terakhir }}</td>
+                            <th>Nama :</th>
+                            <td>{{ pegawai.nama }}</td>
                         </tr>
                         <tr>
-                            <th>PERGURUAN D3 :</th>
+                            <th>Nip :</th>
                             <td>{{ pegawai.perguruan_d3 }}</td>
                         </tr>
                         <tr>
-                            <th>BIDANG D3:</th>
-                            <td>{{ pegawai.bidang_d3 }}</td>
+                            <th>Nama Pasangan :</th>
+                            <td>{{ pegawai.nama_pasangan }}</td>
                         </tr>
                         <tr>
-                            <th>PERGURUAN TINGGI S1:</th>
-                            <td>{{ pegawai.perguruan_tinggi_d4_s1 }}</td>
+                            <th>Tempat Lahir :</th>
+                            <td>{{ pegawai.tempat_lahir }}</td>
                         </tr>
                         <tr>
-                            <th>BIDANG S1:</th>
-                            <td>{{ pegawai.bidang_d4_s1 }}</td>
+                            <th>Tanggal Lahir :</th>
+                            <td>{{ pegawai.tgl_lahir }}</td>
                         </tr>
                         <tr>
-                            <th>PERGURUAN TINGGI S2 :</th>
-                            <td>{{ pegawai.perguruan_tinggi_sp1_s2 }}</td>
+                            <th>Nama Anak Pertama :</th>
+                            <td>{{ pegawai.anak1 }}</td>
                         </tr>
                         <tr>
-                            <th>BIDANG S2:</th>
-                            <td>{{ pegawai.bidang_sp1_s2 }}</td>
+                            <th>Jenis Kelamin  :</th>
+                            <td>{{ pegawai.jk4 }}</td>
                         </tr>
                         <tr>
-                            <th>PERGURUAN TINGGI S3:</th>
-                            <td>{{ pegawai.perguruan_tinggi_sp2_s3 }}</td>
+                            <th>Tanggal Lahir Anak Pertama :</th>
+                            <td>{{ pegawai.tgl_lahir_a1 }}</td>
                         </tr>
                         <tr>
-                            <th>BIDANG S3:</th>
-                            <td>{{ pegawai.bidang_sp2_s3 }}</td>
+                            <th>Nama Anak Ke Dua:</th>
+                            <td>{{ pegawai.anak2 }}</td>
                         </tr>
                         <tr>
-                            <th>MASA BERLAKU:</th>
-                            <td>{{ pegawai.masa_berlaku }}</td>
+                            <th>Jenis Kelamin Anak :</th>
+                            <td>{{ pegawai.jk6 }}</td>
                         </tr>
                         <tr>
-                            <th>ORGANISASI PROFESI:</th>
-                            <td>{{ pegawai.organisasi_profesi }}</td>
+                            <th>Tanggal Lahir Anake Ke Dua :</th>
+                            <td>{{ pegawai.tgl_lahir_a2 }}</td>
                         </tr>
                         <tr>
-                            <th>KURUN WAKTU:</th>
-                            <td>{{ pegawai.kurun_waktu }}</td>
+                            <th>Nama Anak Ke Tiga:</th>
+                            <td>{{ pegawai.anak3 }}</td>
                         </tr>
                         <tr>
-                            <th>TINGKAT:</th>
-                            <td>{{ pegawai.tingkat }}</td>
+                            <th>Jenis Kelamin Anak :</th>
+                            <td>{{ pegawai.jk8 }}</td>
                         </tr>
+                        <tr>
+                            <th>Tanggal Lahir Anak Ke Tiga:</th>
+                            <td>{{ pegawai.tgl_lahir_a3 }}</td>
+                        </tr>
+                        <tr>
+                            <th>Jumlah Anak:</th>
+                            <td>{{ pegawai.jumlah_anak }}</td>
+                        </tr>
+                        
                         
                        
                         

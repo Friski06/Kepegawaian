@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required, user_passes_test
 from absen.models import Absen
 from absen.forms import AbsenForm
 from django.contrib import messages
@@ -6,7 +7,26 @@ from decimal import Decimal
 from django.db.models import Sum
 import datetime
 
+def check_access_superuser(user):
+    if user.is_superuser or user.user_type == 'kaunit':
+        return True
+    return False
+
+
 # Create your views here.
+
+@login_required(login_url='login')
+def absen_user(request):
+    absen = Absen.objects.all()
+    kontext = {
+        'absen' : absen,
+        
+    }
+
+    return render(request, 'users/absen-user.html', kontext)
+
+
+@login_required(login_url='login')
 def absen(request):
     absen = Absen.objects.all()
     kontext = {
@@ -16,6 +36,7 @@ def absen(request):
 
     return render(request, 'absen.html', kontext)
 
+@login_required(login_url='login')
 def detailabsen(request):
     absen = Absen.objects.all()
     kontext = {
@@ -25,7 +46,7 @@ def detailabsen(request):
 
     return render(request, 'detail-absen.html', kontext)
 
-
+@login_required(login_url='login')
 def lupaabsen(request):
     if request.method == 'POST':
         form = AbsenForm(request.POST)
@@ -84,6 +105,25 @@ def lupaabsen(request):
     return render(request, 'lupaabsen.html', konteks)
 
 
+@login_required(login_url='login')
+def rekap_absen_user(request):
+    # Mengambil data absen bulanan
+    absen_bulanan = Absen.objects.filter(tanggal__year=datetime.date.today().year)
+    
+    # Menghitung total jumlah tukin dan jumlah jam
+    total_jumlah_tukin = absen_bulanan.aggregate(Sum('jumlah_potongan_tukin'))['jumlah_potongan_tukin__sum']
+    total_jumlah_jam = absen_bulanan.aggregate(Sum('jumlah_jam'))['jumlah_jam__sum']
+    
+    konteks = {
+        'absen_bulanan': absen_bulanan,
+        'total_jumlah_tukin': total_jumlah_tukin,
+        'total_jumlah_jam': total_jumlah_jam
+    }
+    
+    return render(request, 'users/rekap-absen-user.html', konteks)
+
+
+@login_required(login_url='login')
 def rekap_absen_bulanan(request):
     # Mengambil data absen bulanan
     absen_bulanan = Absen.objects.filter(tanggal__year=datetime.date.today().year)

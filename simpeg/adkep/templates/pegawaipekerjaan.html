@@ -27,10 +27,8 @@
                     <th>No</th>
                     <th>Nama</th>
                     <th>Nip</th>
-                    <th>Mulai Kerja</th>
-                    <th>Lama Bekerja</th>
-                    <th>Jenis Pegawai</th>
-                    <th>Status Pekerjaan</th>
+                    <th>Pegawai</th>
+                    <th>Status</th>
                     <th>Posisi</th>
                     <th>Program Studi</th>
                     <th>Jabatan Struktural</th>
@@ -44,18 +42,16 @@
                     <td>{{ forloop.counter }}</td>
                     <td>{{ pegawai.nama }}</td>
                     <td>{{ pegawai.nip }}</td>
-                    <td>{{ pegawai.mulai_kerja }}</td>
-                    <td>{{ pegawai.lama_kerja }}</td>
                     <td>{{ pegawai.pegawai }}</td>
                     <td>{{ pegawai.status }}</td>
                     <td>{{ pegawai.posisi }}</td>
                     <td>{{ pegawai.program_studi }}</td>
-                    <td>{{ pegawai.jabatanstruktural }}</td>
+                    <td>{{ pegawai.jabatan }}</td>
                     <td>{{ pegawai.jabatan_fungsional }}</td>
                     <td>
                         <center>
                             <a href="{% url 'ubah_pegawaipekerjaan' pegawai.id %}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
-                            <a href="{% url 'detail_pegawaipekerjaan' %}" class="btn btn-primary"><i class="fas fa-info-square"></i></a>
+                            <a href="{% url 'detail_pegawaipekerjaan' pegawai.id %}" class="btn btn-primary"><i class="fas fa-info-square"></i></a>
                             <!-- Button trigger modal -->
                             <button data-toggle="modal" data-target="#hapus-{{ pegawai.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                         </center>

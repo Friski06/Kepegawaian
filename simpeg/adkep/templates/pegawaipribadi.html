@@ -6,14 +6,15 @@
 
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Data Pegawai
-        <a href="{% url 'tambah_pegawai_pribadi' %}"class="btn btn-primary">Tambah</a>
-    </h1>
+    <h1 class="h3 mb-2 text-gray-800">Data Pegawai</h1>
 
+    
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Data Pribadi Pegawai</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Data Pribadi Pegawai
+                <a href="{% url 'tambah_pegawai_pribadi' %}"class="btn btn-primary">Tambah</a>
+            </h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -31,7 +32,6 @@
                     <th>Jenis Kelamin</th>
                     <th>Gelar</th>
                     <th>Tanggal Lahir</th>
-                    <th>Email</th>
                     <th>Hp</th>
                     <th>Alamat</th>
                     <th>Aksi</th>
@@ -46,15 +46,14 @@
                     <td>{{ pegawai.jenis_kelamin }}</td>
                     <td>{{ pegawai.gelar }}</td>
                     <td>{{ pegawai.tgl_lahir }}</td>
-                    <td>{{ pegawai.email }}</td>
                     <td>{{ pegawai.hp }}</td>
                     <td>{{ pegawai.jalan }}</td>
                     <td>
                         <center>
-                            <a href="{% url 'ubah_pegawaipribadi' pegawai.id %}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
-                            <a href="{% url 'detail_pegawaipribadi' pegawai.id%}" class="btn btn-primary"><i class="fas fa-info-square"></i></a>
+                            <a href="{% url 'ubah_pegawaipribadi' pegawai.user_id %}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'detail_pegawaipribadi' pegawai.user_id %}" class="btn btn-primary"><i class="fas fa-info-square"></i></a>
                             <!-- Button trigger modal -->
-                            <button data-toggle="modal" data-target="#hapus-{{ pegawai.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                            <button data-toggle="modal" data-target="#hapus-{{ pegawai.user_id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                         </center>
                     </td>
                     <div class="modal" id="hapus-{{ pegawai.id }}">
@@ -67,7 +66,7 @@
                                     Apakah anda yakin ingin menghapus?
                                 </div>
                                 <div class="modal-footer">
-                                    <a href="{% url 'hapus_pegawaipribadi' pegawai.id %}" class="btn btn-danger">Hapus</a>
+                                    <a href="{% url 'hapus_pegawaipribadi' pegawai.user_id %}" class="btn btn-danger">Hapus</a>
                                     <button class="btn btn-dark" data-dismiss="modal">Tidak</button>
                                 </div>
                             </div>

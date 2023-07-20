@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+    
+{% block content %}
+<div class="container-fluid">
+    <h2>
+        Data SPT
+        <a href="{% url 'tambah_spt' %}"class="btn btn-primary">Tambah</a>
+    </h2>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Data Cuti Izin</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+            {% for message in messages %}
+            {% if message %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endif %}
+            {% endfor %}
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Nrp</th>
+                    <th>Jenis Kegiatan</th>
+                    <th>Tempat Kegiatan</th>
+                    <th>Tanggal Mulai</th>
+                    <th>Tanggal Selesai</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for spt in spt %}
+                <tr>
+                    <td>{{ spt.nama }}</td>
+                    <td>{{ spt.nrp }}</td>
+                    <td>{{ spt.jenis_kegiatan }}</td>
+                    <td>{{ spt.tempat_kegiatan }}</td>
+                    <td>{{ spt.tgl_mulai_kegiatan }}</td>
+                    <td>{{ spt.tgl_selesai_kegiatan }}</td>
+                    
+                    <td>
+                        <center>
+                            <a href="{% url 'ubah_spt' spt.id %}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                            <!-- Button trigger modal -->
+                            <button data-toggle="modal" data-target="#hapus-{{ spt.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </center>
+                    </td>
+                    <div class="modal" id="hapus-{{ spt.id }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">Hapus</h3>
+                                </div>
+                                <div class="modal-body">
+                                    Apakah anda yakin ingin menghapus?
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{% url 'hapus_spt' spt.id %}" class="btn btn-danger">Hapus</a>
+                                    <button class="btn btn-dark" data-dismiss="modal">Tidak</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tr>
+                {% endfor %}
+            </tbody>
+           </table> 
+        </div>
+        </div>
+    </div>
+   </div>
+
+{% endblock content %}
+    
+
+
+

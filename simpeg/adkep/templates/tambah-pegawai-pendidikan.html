@@ -15,7 +15,7 @@
             {% if pesan %}
             <div class="alert alert-success">{{ pesan }}</div>
             {% endif %}
-            <form action="/tambah-pegawai-pendidikan/"method="post">
+            <form action="/tambah-pegawai-pendidikan/"method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
             

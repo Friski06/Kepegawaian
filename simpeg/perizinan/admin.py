@@ -1,5 +1,5 @@
 from django.contrib import admin
-from perizinan.models import Cutiizin, Spt
+from perizinan.models import Cutiizin, Spt , Jabatan
 # Register your models here.
 
 class CutiAdmin(admin.ModelAdmin):
@@ -17,3 +17,4 @@ class SptAdmin(admin.ModelAdmin):
 
 admin.site.register(Cutiizin, CutiAdmin)
 admin.site.register(Spt, SptAdmin)
+admin.site.register(Jabatan)

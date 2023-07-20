@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">Rekap Absen</h1>
+        <select name="bulan" id="bulan" onchange="showSelectedMonth()">
+            <option value="Januari">Januari</option>
+            <option value="Februari">Februari</option>
+            <option value="Maret">Maret</option>
+            <option value="April">April</option>
+            <option value="Mei">Mei</option>
+            <option value="Juni">Juni</option>
+            <option value="Juli">Juli</option>
+            <option value="Agustus">Agustus</option>
+            <option value="September">September</option>
+            <option value="Oktober">Oktober</option>
+            <option value="November">November</option>
+            <option value="Desember">Desember</option>
+          </select>
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Data Rekap Absen Bulanan
+                   
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>NIP</th>
+                                <th>Tanggal</th>
+                                <th>Jam Masuk</th>
+                                <th>Jam Pulang</th>
+                                <th>Jumlah Jam</th>
+                                
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for absen in absen_bulanan %}
+                            <tr>
+                                <td>{{ absen.nama }}</td>
+                                <td>{{ absen.nip }}</td>
+                                <td>{{ absen.tanggal }}</td>
+                                <td>{{ absen.masuk }}</td>
+                                <td>{{ absen.pulang }}</td>
+                                <td>{{ absen.jumlah_jam }}</td>
+                                
+                                <td>
+                                    <center>
+                                        <a href="#" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                        <a href="#" class="btn btn-primary"><i class="fas fa-info-square"></i></a>
+                                        <!-- Button trigger modal -->
+                                        <button data-toggle="modal" data-target="#hapus-{{ absen.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                    </center>
+                                </td>
+                            </tr>
+                            <div class="modal" id="hapus-{{ absen.id }}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title">Hapus</h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            Apakah Anda yakin ingin menghapus?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="#" class="btn btn-danger">Hapus</a>
+                                            <button class="btn btn-dark" data-dismiss="modal">Tidak</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="5">Total</th>
+                                <th>{{ total_jumlah_jam }}</th>
+                                <th>{{ total_jumlah_tukin }}</th>
+                            </tr>
+                        </tfoot>
+                        <script>
+                            function showSelectedMonth() {
+                              var selectElement = document.getElementById("bulan");
+                              var selectedMonth = selectElement.value;
+                              console.log("Bulan yang dipilih: " + selectedMonth);
+                              // Lakukan operasi atau tampilkan data yang sesuai dengan bulan yang dipilih
+                            }
+                          </script>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Page Content -->
+{% endblock %}

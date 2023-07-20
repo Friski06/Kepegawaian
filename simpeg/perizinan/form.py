@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from perizinan.models import Cutiizin, Spt
+from perizinan.models import Cutiizin, Spt, Jabatan
 from django import forms
 from adkep.models import JabatanStruktural
 
@@ -62,3 +62,8 @@ class FromSpt(ModelForm):
             'tgl_selesai_kegiatan' : forms.DateInput({'class':'form-control'}),
         
         }
+
+class JabatanForm(forms.ModelForm):
+    class Meta:
+        model = Jabatan
+        fields = ['nama']

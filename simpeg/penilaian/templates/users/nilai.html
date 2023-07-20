@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+    
+{% block content %}
+   <div class="container">
+    <center>
+        <h1>SIMPEG</h1>
+    </center>
+
+    <h2>
+        Penilaian Pegawai
+        <a href="#"class="btn btn-primary">Tambah</a>
+    </h2>
+  
+    <div class="row">
+        <div class="col-md-12">
+            {% for message in messages %}
+            {% if message %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endif %}
+            {% endfor %}
+           <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                   
+                    <th>Kerapian</th>
+                    <th>Kesopanan</th>
+                    <th>Dedikasi</th>
+                    <th>Loyalitas</th>
+                    <th>Disiplin</th>
+                    <th>Kerjasama</th>
+                    <th>Tupoksi</th>
+                    
+                    
+                </tr>
+            </thead>
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Nrp</th>
+                    <th>Kerapian</th>
+                    <th>Kesopanan</th>
+                    <th>Dedikasi</th>
+                    <th>Loyalitas</th>
+                    <th>Disiplin</th>
+                    <th>Kerjasama</th>
+                    <th>Tupoksi</th>
+                    <th>Rata-Rata</th>
+                    <th>Nilai</th>
+                    <th>Potongan</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for nilai in nilai %}
+                <tr>
+                    <td>{}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+           </table> 
+        </div>
+    </div>
+   </div>
+
+{% endblock content %}
+    
+
+
+

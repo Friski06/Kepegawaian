@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Login</title>
+    <title>SIMPEG-Login</title>
 
     <!-- Custom fonts for this template-->
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
@@ -42,11 +42,11 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
-                                    <form class="user" action="" method="POST">
+                                    <form class="user" method="POST" action="{% url 'login' %}">
                                         {% csrf_token %}
                                         <div class="form-group">
-                                            <label class="form-label" for="username">Username</label>
-                                            {{form.username}}
+                                            <label class="form-label" for="email">Email</label>
+                                            {{form.email}}
                                         </div>
                                         <div class="form-group">
                                             <label class="form-label" for="password">Password</label>

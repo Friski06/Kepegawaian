@@ -2,24 +2,12 @@ from django.db import models
 
 # Create your models here.
 
+class Jabatan(models.Model):
+    nama = models.CharField(max_length=255)
+    def __str__(self):
+     return self.nama
+
 class Cutiizin(models.Model):
-    JBTN_CHOICES = [
-        ('DIREKTUR', 'Direktur'),
-        ('WADIR', 'Wakil Direktur'),
-        ('KETUA_SPMI', 'Ketua SPMI'),
-        ('KABAG_KA_UPT', 'Kabag/Ka. UPT'),
-        ('KAPRODI', 'Kaprodi'),
-        ('SEKPRODI', 'Sekretaris Prodi'),
-        ('KA_LAB', 'Kepala Lab'),
-        ('PENATA_LK', 'Penata LK'),
-        ('BENDAHARA', 'Bendahara'),
-        ('KA_UNIT', 'Kepala Unit'),
-        ('SEKETARIS_DIREKTUR', 'Sekretaris Direktur'),
-        ('OPERATOR_PT', 'Operator PT'),
-        ('KEPALA_ASRAMA', 'Kepala Asrama'),
-        ('DOSEN', 'Dosen'),
-        ('STAF','Staf')
-    ]
     UNIT_CHOICES = [
         ('pengembangan_akademik', 'Pengembangan Akademik'),
         ('pengembangan_kemahasiswaan', 'Pengembangan Kemahasiswaan'),
@@ -43,7 +31,7 @@ class Cutiizin(models.Model):
     keperluan = models.CharField(max_length=100)
     tgl_mulai = models.DateField()
     tgl_selesai = models.DateField()
-    jabatan = models.CharField(choices=JBTN_CHOICES, max_length=50, null=True)
+    jabatan = models.CharField(max_length=255, null=True)
     unit = models.CharField(choices=UNIT_CHOICES, max_length=100, null=True)
     jam_mulai = models.TimeField(null=True)
     jam_selesai = models.TimeField(null=True)
@@ -71,3 +59,4 @@ class Spt(models.Model):
     
     def __str__(self):
         return self.nama
+    
