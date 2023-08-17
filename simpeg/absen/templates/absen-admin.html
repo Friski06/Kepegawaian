@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+    
+{% block content %}
+   <!-- Begin Page Content -->
+   <div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Data Absen Pegawai</h1>
+
+   
+    <!-- Tab content -->
+    <div class="tab-content" id="myTabContent">
+        <!-- Tab absen bawahan -->
+        <div class="tab-pane fade show active" id="absen-bawahan" role="tabpanel" aria-labelledby="absen-bawahan-tab">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Data Absen Pegawai</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>NIP</th>
+                                    <th>Tanggal</th>
+                                    <th>Jam Masuk</th>
+                                    <th>Jam Pulang</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for absen in absen %}
+                                <tr>
+                                    <td>{{ absen.pegawaipribadi.nama }}</td>
+                                    <td>{{ absen.pegawaipribadi.nip }}</td>
+                                    <td>{{ absen.tanggal }}</td>
+                                    <td>{{ absen.masuk }}</td>
+                                    <td>{{ absen.pulang }}</td>
+                                    <td>
+                                        <center>
+                                            <a href="#" class="btn btn-primary"><i class="fas fa-info-square"></i></a>
+                                        </center>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

@@ -28,29 +28,29 @@
                     <th>Nama</th>
                     <th>Nrp</th>
                     <th>Pendidikan Terakir</th>
-                    <th>Perguruan D3</th>
-                    <th>Bidang D3</th>
+                    <th>Perguruan </th>
+                    <th>Bidang</th>
                     <th>Masa Berlaku</th>
                     <th>Organisasi Profesi</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                {% for pegawai in pegawai %}
+                {% for pegawai in pendidikan %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ pegawai.nama }}</td>
-                    <td>{{ pegawai.nip }}</td>
+                    <td>{{ pegawai.pegawaipribadi.nama }}</td>
+                    <td>{{ pegawai.pegawaipribadi.nip }}</td>
                     <td>{{ pegawai.pendidikan_terakhir }}</td>
-                    <td>{{ pegawai.perguruan_d3 }}</td>
-                    <td>{{ pegawai.bidang_d3 }}</td>
+                    <td>{{ pegawai.perguruan }}</td>
+                    <td>{{ pegawai.bidang }}</td>
                     <td>{{ pegawai.masa_berlaku }}</td>
                     <td>{{ pegawai.organisasi_profesi }}</td>
                     
                     <td>
                         <center>
                             <a href="{% url 'ubah_pegawaipendidikan' pegawai.id %}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
-                            <a href="{% url 'detail_pegawaipendidikan' %}" class="btn btn-primary"><i class="fas fa-info-square"></i></a>
+                            <a href="{% url 'detail_pegawaipendidikan' pegawai.id %}" class="btn btn-primary"><i class="fas fa-info-square"></i></a>
                             <!-- Button trigger modal -->
                             <button data-toggle="modal" data-target="#hapus-{{ pegawai.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                         </center>

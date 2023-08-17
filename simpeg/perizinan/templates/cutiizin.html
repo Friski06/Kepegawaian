@@ -4,14 +4,15 @@
    <!-- Begin Page Content -->
    <div class="container-fluid">
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Cuti Izin
-        <a href="{% url 'tambah_cutiizin' %}"class="btn btn-primary">Tambah</a>
-    </h1>
+    
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Data Cuti Izin</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Data Cuti Izin
+                <a href="{% url 'tambah_cutiizin' %}"class="btn btn-primary float-right">Tambah</a>
+            </h6>
+            
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -25,27 +26,27 @@
                         <tr>
                             <th>Nama</th>
                             <th>Nrp</th>
-                            <th>Jabatan</th>
                             <th>Keperluan</th>
                             <th>Tanggal Mulai</th>
                             <th>Tanggal Selesai</th>
+                            <th>Izin Atasan</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for cuti in cuti %}
                         <tr>
-                            <td>{{ cuti.nama }}</td>
-                            <td>{{ cuti.nrp }}</td>
-                            <td>{{ cuti.jabatan }}</td>
+                            <td>{{ cuti.pegawaipribadi.nama }}</td>
+                            <td>{{ cuti.pegawaipribadi.nip }}</td>
                             <td>{{ cuti.keperluan }}</td>
                             <td>{{ cuti.tgl_mulai }}</td>
                             <td>{{ cuti.tgl_selesai }}</td>
+                            <td>{{ cuti.verifikasi_kaunit }}</td>
                             
                             <td>
                                 <center>
                                     <a href="{% url 'ubah_cuti' cuti.id %}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
-                                    <a href="#" class="btn btn-primary"><i class="fas fa-info-square"></i></a>
+                                    <a href="{% url 'detailcuti' cuti.pegawaipribadi_id %}" class="btn btn-primary"><i class="fas fa-eye"></i></a>
                                     <!-- Button trigger modal -->
                                     <button data-toggle="modal" data-target="#hapus-{{ cuti.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                                 </center>

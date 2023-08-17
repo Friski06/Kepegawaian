@@ -1,11 +1,11 @@
 from django.forms import ModelForm
 from perizinan.models import Cutiizin, Spt, Jabatan
 from django import forms
-from adkep.models import JabatanStruktural
+from adkep.models import JabatanBawahan
 
-class JabatanStrukturalForm(ModelForm):
+class JabatanBawahanForm(ModelForm):
     class Meta:
-        model = JabatanStruktural
+        model = JabatanBawahan
         fields = '__all__'
         
 
@@ -24,13 +24,12 @@ class FromCuti(forms.ModelForm):
         ('pusat_pengawasan_pengadilan_internal', 'Pusat Pengawasan Pengadilan Internal'),
     ]
     unit = forms.ChoiceField(choices=UNIT_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
-    jabatanstruktural = forms.ModelChoiceField(queryset=JabatanStruktural.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
+    jabatan = forms.ModelChoiceField(queryset=JabatanBawahan.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
     class Meta:
         model = Cutiizin
-        fields = ['nama', 'nrp', 'keperluan', 'tgl_mulai', 'tgl_selesai', 'jam_mulai', 'jam_selesai', 'unit', 'hari', 'jam']
+        fields = [ 'keperluan', 'tgl_mulai', 'tgl_selesai', 'jam_mulai', 'jam_selesai', 'unit', 'hari', 'jam']
         widgets = {
-            'nama': forms.TextInput(attrs={'class': 'form-control'}),
-            'nrp': forms.NumberInput(attrs={'class': 'form-control'}),
+            
             'keperluan': forms.TextInput(attrs={'class': 'form-control'}),
             'tgl_mulai': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'tgl_selesai': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
@@ -48,18 +47,18 @@ class VerifikasiForm(forms.ModelForm):
         fields = ['verifikasi_kaunit', 'verifikasi_direksi']
 
 class FromSpt(ModelForm):
+    jabatan = forms.ModelChoiceField(queryset=JabatanBawahan.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
     class Meta:
         model = Spt
-        fields = '__all__'
+        fields = [ 'jabatan','jenis_kegiatan','tempat_kegiatan', 'tgl_mulai_kegiatan', 'tgl_selesai_kegiatan',]
 
         widgets = {
 
-            'nama' : forms.TextInput({'class':'form-control'}),
-            'nrp' : forms.TextInput({'class':'form-control'}),
+            
             'jenis_kegiatan' : forms.TextInput({'class':'form-control'}),
             'tempat_kegiatan' : forms.TextInput({'class':'form-control'}),
-            'tgl_mulai_kegiatan' : forms.DateInput({'class':'form-control'}),
-            'tgl_selesai_kegiatan' : forms.DateInput({'class':'form-control'}),
+            'tgl_mulai_kegiatan' : forms.DateInput({'class':'form-control','type': 'date'}),
+            'tgl_selesai_kegiatan' : forms.DateInput({'class':'form-control','type': 'date'}),
         
         }
 

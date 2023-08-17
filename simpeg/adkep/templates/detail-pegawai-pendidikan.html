@@ -8,7 +8,7 @@
     </div>
     <div class="card" style="width:70%; margin-bottom: 100px">
         <div class="card-body">
-            <h2>Detail Pegawai Pekerjaan</h2>
+            <h2>Detail Pegawai Pendidikan</h2>
             <div class="row">
                 <div class="col-md-4">
                     {% for pegawai in pegawai %}
@@ -27,11 +27,11 @@
                         <tbody>
                             <tr>
                                 <th>NAMA:</th>
-                                <td>{{ pegawai.nama }}</td>
+                                <td>{{ pegawai.pegawaipribadi.nama }}</td>
                             </tr>
                             <tr>
                                 <th>NIP:</th>
-                                <td>{{ pegawai.nip }}</td>
+                                <td>{{ pegawai.pegawaipribadi.nip }}</td>
                             </tr>
                             <tr>
                                 <th>PENDIDIKAN TERAKHIR:</th>
@@ -39,35 +39,11 @@
                             </tr>
                             <tr>
                                 <th>PERGURUAN D3 :</th>
-                                <td>{{ pegawai.perguruan_d3 }}</td>
+                                <td>{{ pegawai.perguruan }}</td>
                             </tr>
                             <tr>
-                                <th>BIDANG D3:</th>
-                                <td>{{ pegawai.bidang_d3 }}</td>
-                            </tr>
-                            <tr>
-                                <th>PERGURUAN TINGGI S1:</th>
-                                <td>{{ pegawai.perguruan_tinggi_d4_s1 }}</td>
-                            </tr>
-                            <tr>
-                                <th>BIDANG S1:</th>
-                                <td>{{ pegawai.bidang_d4_s1 }}</td>
-                            </tr>
-                            <tr>
-                                <th>PERGURUAN TINGGI S2 :</th>
-                                <td>{{ pegawai.perguruan_tinggi_sp1_s2 }}</td>
-                            </tr>
-                            <tr>
-                                <th>BIDANG S2:</th>
-                                <td>{{ pegawai.bidang_sp1_s2 }}</td>
-                            </tr>
-                            <tr>
-                                <th>PERGURUAN TINGGI S3:</th>
-                                <td>{{ pegawai.perguruan_tinggi_sp2_s3 }}</td>
-                            </tr>
-                            <tr>
-                                <th>BIDANG S3:</th>
-                                <td>{{ pegawai.bidang_sp2_s3 }}</td>
+                                <th>BIDANG :</th>
+                                <td>{{ pegawai.bidang }}</td>
                             </tr>
                             <tr>
                                 <th>MASA BERLAKU:</th>

@@ -1,14 +1,20 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
-from absen.models import Absen
+from absen.models import Absen, JabatanBawahan
+from adkep.models import PegawaiPribadi
 from absen.forms import AbsenForm
 from django.contrib import messages
 from decimal import Decimal
 from django.db.models import Sum
-import datetime
+from absen.resources import AbsenResource
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
+
+
 
 def check_access_superuser(user):
-    if user.is_superuser or user.user_type == 'kaunit':
+    if user.is_superuser or user.user_type == 'admin':
         return True
     return False
 
@@ -17,13 +23,51 @@ def check_access_superuser(user):
 
 @login_required(login_url='login')
 def absen_user(request):
-    absen = Absen.objects.all()
+    absen = Absen.objects.filter(pegawaipribadi_id=request.session['_auth_user_id'])
     kontext = {
         'absen' : absen,
         
     }
 
     return render(request, 'users/absen-user.html', kontext)
+
+#mengajukan keterlambatan absen ke admin
+class listPegawaiBawahan:
+    def __init__(self, nama, jabatan):
+        self.nama = nama
+        self.jabatan = jabatan 
+@login_required(login_url='login')
+def notifikasi_absen(request):
+    
+    absen = Absen.objects.all()
+    belum = Absen.objects.filter(status = 'BELUM')
+    print("ID Absen yang belum di-setujui:", [spt.id for spt in belum])
+    kontext = {
+
+         'belum'  : belum,
+         'absen'  : absen
+         
+    }
+    
+    return render(request, 'notifikasi-absen.html',kontext)
+
+def setuju_absen(request, id_absen):
+    absen = Absen.objects.get(id=id_absen)
+    
+    if request.user.is_authenticated and request.user.user_type == 'admin':  # Pastikan pengguna adalah kaunit
+        absen.status = 'DISETUJUI'
+        absen.save()
+        
+    return redirect('notifikasi') 
+
+def tolak_absen(request, id_absen):
+    absen = Absen.objects.get(id=id_absen)
+    
+    if request.user.is_authenticated and request.user.user_type == 'admin':  # Pastikan pengguna adalah kaunit
+        absen.status = 'DITOLAK'
+        absen.save()
+        
+    return redirect('notifikasi')  
 
 
 @login_required(login_url='login')
@@ -35,6 +79,28 @@ def absen(request):
     }
 
     return render(request, 'absen.html', kontext)
+
+@login_required(login_url='login')
+def absen_bawahan(request):
+    # Pastikan user yang sedang login memiliki atribut 'jabatan'
+    try:
+        jabatan_atasan = request.user.jabatan
+    except AttributeError:
+        jabatan_atasan = None
+
+    # Cek jika user adalah atasan
+    if jabatan_atasan and jabatan_atasan == 'atasan':
+        # Mengambil data absen bawahan berdasarkan jabatan struktural
+        absen_bawahan = Absen.objects.filter(jabatan__id_atasan=request.user.id)
+    else:
+        # Jika user bukan atasan, set data absen bawahan menjadi None
+        absen_bawahan = None
+    
+    konteks = {
+        'absen_bawahan': absen_bawahan,
+    }
+    
+    return render(request, 'absen-bawahan.html', konteks)
 
 @login_required(login_url='login')
 def detailabsen(request):
@@ -107,35 +173,118 @@ def lupaabsen(request):
 
 @login_required(login_url='login')
 def rekap_absen_user(request):
-    # Mengambil data absen bulanan
-    absen_bulanan = Absen.objects.filter(tanggal__year=datetime.date.today().year)
-    
-    # Menghitung total jumlah tukin dan jumlah jam
-    total_jumlah_tukin = absen_bulanan.aggregate(Sum('jumlah_potongan_tukin'))['jumlah_potongan_tukin__sum']
-    total_jumlah_jam = absen_bulanan.aggregate(Sum('jumlah_jam'))['jumlah_jam__sum']
-    
+    if request.method == 'POST':
+        selected_month = int(request.POST.get('bulan'))  # Ambil bulan yang dipilih dari form
+        absen_bulanan = Absen.objects.filter(pegawaipribadi_id=request.session['_auth_user_id'], tanggal__month=selected_month)
+        total_jumlah_tukin = absen_bulanan.aggregate(Sum('jumlah_potongan_tukin'))['jumlah_potongan_tukin__sum']
+        total_jumlah_jam = absen_bulanan.aggregate(Sum('jumlah_jam'))['jumlah_jam__sum']
+    else:
+        absen_bulanan = Absen.objects.all()
+        total_jumlah_tukin = absen_bulanan.aggregate(Sum('jumlah_potongan_tukin'))['jumlah_potongan_tukin__sum']
+        total_jumlah_jam = absen_bulanan.aggregate(Sum('jumlah_jam'))['jumlah_jam__sum']
+
     konteks = {
+       
         'absen_bulanan': absen_bulanan,
         'total_jumlah_tukin': total_jumlah_tukin,
         'total_jumlah_jam': total_jumlah_jam
     }
-    
-    return render(request, 'users/rekap-absen-user.html', konteks)
+    return render(request, 'users/rekap-absen-user.html',konteks)
 
 
 @login_required(login_url='login')
 def rekap_absen_bulanan(request):
-    # Mengambil data absen bulanan
-    absen_bulanan = Absen.objects.filter(tanggal__year=datetime.date.today().year)
-    
-    # Menghitung total jumlah tukin dan jumlah jam
-    total_jumlah_tukin = absen_bulanan.aggregate(Sum('jumlah_potongan_tukin'))['jumlah_potongan_tukin__sum']
-    total_jumlah_jam = absen_bulanan.aggregate(Sum('jumlah_jam'))['jumlah_jam__sum']
-    
+    if request.method == 'POST':
+        selected_month = int(request.POST.get('bulan'))  # Ambil bulan yang dipilih dari form
+        absen_bulanan = Absen.objects.filter(tanggal__month=selected_month)
+        total_jumlah_tukin = absen_bulanan.aggregate(Sum('jumlah_potongan_tukin'))['jumlah_potongan_tukin__sum']
+        total_jumlah_jam = absen_bulanan.aggregate(Sum('jumlah_jam'))['jumlah_jam__sum']
+    else:
+        absen_bulanan = Absen.objects.all()
+        total_jumlah_tukin = absen_bulanan.aggregate(Sum('jumlah_potongan_tukin'))['jumlah_potongan_tukin__sum']
+        total_jumlah_jam = absen_bulanan.aggregate(Sum('jumlah_jam'))['jumlah_jam__sum']
+
     konteks = {
+       
         'absen_bulanan': absen_bulanan,
         'total_jumlah_tukin': total_jumlah_tukin,
-        'total_jumlah_jam': total_jumlah_jam
+        'total_jumlah_jam': total_jumlah_jam,
+        
+
     }
-    
     return render(request, 'rekap-absen-bulanan.html', konteks)
+
+@login_required(login_url='login')
+def detail_absen(request,pegawaipribadi_id):
+    bulan = request.POST.get('bulan')
+    
+    try:
+        selected_month = int(bulan)
+    except (ValueError, TypeError):
+        # Tangani jika nilai bulan tidak valid
+        selected_month = None
+    absen = Absen.objects.filter(pegawaipribadi=pegawaipribadi_id,tanggal__month=selected_month)
+    total_jumlah_tukin = absen.aggregate(Sum('jumlah_potongan_tukin'))['jumlah_potongan_tukin__sum']
+    total_jumlah_jam = absen.aggregate(Sum('jumlah_jam'))['jumlah_jam__sum']
+    kontext = {
+        'absen' : absen,
+        'total_jumlah_tukin': total_jumlah_tukin,
+        'total_jumlah_jam': total_jumlah_jam,
+    }
+
+    return render(request, 'detail-absen.html', kontext)
+
+@login_required(login_url='login')
+def cetak_rekap_absen(request):
+    
+    absen = AbsenResource()
+    dataset = absen.export(queryset=Absen.objects.filter(pegawaipribadi_id=request.session['_auth_user_id']))
+    response = HttpResponse(dataset.xls, content_type= 'application/vnd.ms-excel' )
+    response['Content-Disposition'] = 'attachment; filename=absen.xls'
+    return response
+
+@login_required(login_url='login')
+def cetak_rekap_absen_user_pdf(request):
+  
+    
+   absen_resource = AbsenResource()
+   queryset = Absen.objects.filter(pegawaipribadi_id=request.session['_auth_user_id'])
+   dataset = absen_resource.export(queryset=queryset)
+    
+   template_path = 'cetak-absen.html'  # Ganti dengan path template HTML yang sesuai
+   context = {'dataset': dataset}
+    
+   response = HttpResponse(content_type='application/pdf')
+   response['Content-Disposition'] = 'attachment; filename="absen.pdf"'
+    
+   template = get_template(template_path)
+   html = template.render(context)
+    
+   pisa_status = pisa.CreatePDF(html, dest=response)
+   if pisa_status.err:
+        return HttpResponse('Gagal membuat PDF', content_type='text/plain')
+    
+   return response
+
+@login_required(login_url='login')
+def cetak_rekap_absen_pdf(request):
+  
+    
+   absen_resource = AbsenResource()
+   queryset = Absen.objects.filter(pegawaipribadi_id=request.session['_auth_user_id'])
+   dataset = absen_resource.export(queryset=queryset)
+    
+   template_path = 'cetak-absen.html'  # Ganti dengan path template HTML yang sesuai
+   context = {'dataset': dataset}
+    
+   response = HttpResponse(content_type='application/pdf')
+   response['Content-Disposition'] = 'attachment; filename="absen.pdf"'
+    
+   template = get_template(template_path)
+   html = template.render(context)
+    
+   pisa_status = pisa.CreatePDF(html, dest=response)
+   if pisa_status.err:
+        return HttpResponse('Gagal membuat PDF', content_type='text/plain')
+    
+   return response

@@ -5,88 +5,90 @@
     <div class="container-fluid">
         <!-- Page Heading -->
         <h1 class="h3 mb-2 text-gray-800">Rekap Absen</h1>
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link active" id="rekap-pegawai-tab" data-toggle="tab" href="#rekap-pegawai" role="tab"
-                    aria-controls="rekap-pegawai" aria-selected="true">Rekap Absen Pegawai</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="rekap-bawahan-tab" data-toggle="tab" href="#rekap-bawahan" role="tab"
-                    aria-controls="rekap-bawahan" aria-selected="false">Rekap Absen Bawahan</a>
-            </li>
-        </ul>
-
-        <!-- Tab content -->
-        <div class="tab-content">
-            <!-- Rekap Absen Pegawai -->
-            <div class="tab-pane fade show active" id="rekap-pegawai" role="tabpanel" aria-labelledby="rekap-pegawai-tab">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Data Rekap Absen Pegawai</h6>
-                    </div>
-                    <div class="card-body">
-                        <!-- Tampilkan data rekap absen pegawai di sini -->
-                        <table class="table">
-                            <!-- Tambahkan header tabel -->
-                            <thead>
-                                <tr>
-                                    <th>Nama Pegawai</th>
-                                    <th>Tanggal Absen</th>
-                                    <th>Jam Masuk</th>
-                                    <th>Jam Pulang</th>
-                                    <!-- Tambahkan kolom lain yang diperlukan -->
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Tampilkan data rekap absen pegawai dengan menggunakan perulangan -->
-                                {% for absen in rekap_absen_pegawai %}
-                                <tr>
-                                    <td>{{ absen.nama }}</td>
-                                    <td>{{ absen.tanggal }}</td>
-                                    <td>{{ absen.masuk }}</td>
-                                    <td>{{ absen.pulang }}</td>
-                                    <!-- Tambahkan kolom lain yang diperlukan -->
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Data Rekap Absen Bulanan
+                    <form method="post">  <!-- Form untuk pilih bulan -->
+                        {% csrf_token %}
+                        <select name="bulan" id="bulan" onchange="this.form.submit()">
+                            <option value="1">Januari</option>
+                            <option value="2">Februari</option>
+                            <option value="3">Maret</option>
+                            <option value="4">April</option>
+                            <option value="5">Mei</option>
+                            <option value="6">Juni</option>
+                            <option value="7">Juli</option>
+                            <option value="8">Agustus</option>
+                            <option value="9">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                            <!-- Tambahkan pilihan bulan lainnya -->
+                        </select>
+                    </form>
+                    <a href="#" class="btn btn-primary float-right">Rekap Data Absen</a>
+                </h6>
             </div>
-
-            <!-- Rekap Absen Bawahan -->
-            <div class="tab-pane fade" id="rekap-bawahan" role="tabpanel" aria-labelledby="rekap-bawahan-tab">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Data Rekap Absen Bawahan</h6>
-                    </div>
-                    <div class="card-body">
-                        <!-- Tampilkan data rekap absen bawahan di sini -->
-                        <table class="table">
-                            <!-- Tambahkan header tabel -->
-                            <thead>
-                                <tr>
-                                    <th>Nama Bawahan</th>
-                                    <th>Tanggal Absen</th>
-                                    <th>Jam Masuk</th>
-                                    <th>Jam Pulang</th>
-                                    <!-- Tambahkan kolom lain yang diperlukan -->
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Tampilkan data rekap absen bawahan dengan menggunakan perulangan -->
-                                {% for absen in rekap_absen_bawahan %}
-                                <tr>
-                                    <td>{{ absen.nama_bawahan }}</td>
-                                    <td>{{ absen.tanggal }}</td>
-                                    <td>{{ absen.masuk }}</td>
-                                    <td>{{ absen.pulang }}</td>
-                                    <!-- Tambahkan kolom lain yang diperlukan -->
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>NIP</th>
+                                <th>Tanggal</th>
+                               
+                                <th>Jumlah Jam</th>
+                                <th>Jumlah Potongan Tukin</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for absen in absen_bulanan %}
+                            <tr>
+                                <td>{{ absen.pegawaipribadi.nama }}</td>
+                                <td>{{ absen.pegawaipribadi.nip }}</td>
+                                <td>{{ absen.tanggal }}</td>
+                                
+                                <td>{{ absen.jumlah_jam }}</td>
+                                <td>{{ absen.jumlah_potongan_tukin }}</td>
+                                <td>
+                                    <center>
+                                        <a href="#" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                        <a href="{% url 'detailabsen' absen.pegawaipribadi_id  %}" class="btn btn-primary"><i class="fas fa-eye"></i></a>
+                                        <!-- Button trigger modal -->
+                                        <button data-toggle="modal" data-target="#hapus-{{ absen.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                    </center>
+                                </td>
+                            </tr>
+                            <div class="modal" id="hapus-{{ absen.id }}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title">Hapus</h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            Apakah Anda yakin ingin menghapus?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="#" class="btn btn-danger">Hapus</a>
+                                            <button class="btn btn-dark" data-dismiss="modal">Tidak</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="3">Total</th>
+                                <th>{{ total_jumlah_jam }}</th>
+                                <th>{{ total_jumlah_tukin }}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
         </div>

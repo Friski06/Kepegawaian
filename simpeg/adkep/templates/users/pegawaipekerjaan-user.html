@@ -13,27 +13,29 @@
             </h2>
             <div class="row">
                 <div class="col-md-4">
-                    {% for pegawai in pegawai %}
+                    {% for pegawai in pekerjaan %}
+                    
                     {% if pegawai.sertifikasi_dosen %}
                         <div class="text-center">
-                            <img src="{{ pegawai.sertifikasi_dosen.url }}" alt="Foto Pegawai" class="img-fluid">
+                            <img src="{{ pegawai.sertifikasi_dosen.url }}" alt="Sertifikat" class="img-fluid">
                         </div>
                     {% else %}
                         <div class="text-center">
-                            Foto tidak tersedia.
+                           Sertifikat Tidak Tersedia
                         </div>
                     {% endif %}
+                
                 </div>
                 <div class="col-md-8">
                     <table class="table table-bordered">
                         <tbody>
                             <tr>
                                 <th>NAMA:</th>
-                                <td>{{ pegawai.nama }}</td>
+                                <td>{{ pegawai.pegawaipribadi.nama }}</td>
                             </tr>
                             <tr>
                                 <th>NIP:</th>
-                                <td>{{ pegawai.nip }}</td>
+                                <td>{{ pegawai.pegawaipribadi.nip }}</td>
                             </tr>
                             <tr>
                                 <th>MULAI BEKERJA:</th>
@@ -104,7 +106,7 @@
                     </table>
                 </div>
             </div>
-            <a href="/pegawaipribadi" class="btn btn-danger">Kembali</a>
+            <a href="/dashboard" class="btn btn-danger">Kembali</a>
         </div>
     </div>
 

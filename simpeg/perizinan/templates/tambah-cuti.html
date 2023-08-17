@@ -19,9 +19,9 @@
             <form action="/tambah-cutiizin/"method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-            
+                <input type="hidden" value="belum" name="status">
                 <button class="btn btn-primary">Tambah</button>
-                <a href="/cutiizin"class="btn btn-danger">Kembali</a>
+                <a href="/dashboard"class="btn btn-danger">Kembali</a>
             </form>
         </div>
     </div>

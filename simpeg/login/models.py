@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
-
+from adkep.models import JabatanBawahan
 from django.utils.translation import gettext_lazy as _
 from .managers import CustomUserManager
 
@@ -14,10 +14,9 @@ class User(AbstractUser):
     user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, blank=True)
     username = None
     email = models.EmailField(_("email address"), unique=True)
-
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
-
+    jabatan = models.ForeignKey(JabatanBawahan, on_delete=models.CASCADE, null=True)
     objects = CustomUserManager()
 
     def __str__(self):

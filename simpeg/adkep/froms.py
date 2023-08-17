@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from adkep.models import JabatanStruktural, PegawaiPribadi, PegawaiPekerjaan, PegawaiPendidikan, PegawaiKeluarga, PegawaiBank, Provinsi, Kabupaten
+from adkep.models import JabatanStruktural,JabatanBawahan , PegawaiPribadi, PegawaiPekerjaan, PegawaiPendidikan, PegawaiKeluarga, PegawaiBank, Provinsi, Kabupaten
 from perizinan.models import  Jabatan
 
 class JabatanForm(ModelForm):
@@ -13,6 +13,13 @@ class JabatanStrukturalForm(ModelForm):
     class Meta:
         model = JabatanStruktural
         fields = '__all__'
+
+
+class JabatanBawahanForm(ModelForm):
+    class Meta:
+        model = JabatanBawahan
+        fields = '__all__'
+
 
 class ProvinsiForm(ModelForm):
     class Meta:
@@ -54,11 +61,10 @@ class PegawaiPribadiForm(ModelForm):
     kabupaten = forms.ModelChoiceField(queryset=Kabupaten.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
     tlp_rumah = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     hp = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-
+    
     class Meta:
         model = PegawaiPribadi
-        exclude = ['user', 'pekerjaan','pendidikan']
+        exclude = ['user', 'pekerjaan','pendidikan','keluarga','bank']
 class PegawaiPekerjaanForm(ModelForm):
     
     PEGAWAI_CHOICES = [
@@ -103,8 +109,7 @@ class PegawaiPekerjaanForm(ModelForm):
         ('pusat_data_dan_akreditasi', 'Pusat Data Dan Akreditasi'),
         ('pusat_pengawasan_pengadilan_internal', 'Pusat Pengawasan Pengadilan Internal'),
     ]
-    nama = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    nip = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    
     mulai_kerja = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control','type': 'date'}))
     lama_kerja = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     pegawai = forms.ChoiceField(choices=PEGAWAI_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
@@ -121,15 +126,16 @@ class PegawaiPekerjaanForm(ModelForm):
     gol = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     sertifikasi_dosen = forms.ImageField(required=False, widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
     no_sertifikasi_dosen = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    jabatan = forms.ModelChoiceField(queryset=JabatanStruktural.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
+    jabatan = forms.ModelChoiceField(queryset=JabatanBawahan.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
+
 
     class Meta:
         model = PegawaiPekerjaan
         fields = '__all__'
-
+        exclude = ['user','pegawaipribadi']
+        
 class PegawaiPendidikanForm(ModelForm):
-    nama = forms.ModelChoiceField(queryset=PegawaiPribadi.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
-    nip = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    
     pendidikan_terakhir = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     perguruan = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     bidang= forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -147,8 +153,7 @@ class PegawaiKeluargaForm(ModelForm):
         ('L', 'Laki-laki'),
         ('P', 'Perempuan'),
     ]
-    nama = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    nip = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    
     nama_pasangan = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     tempat_lahir = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     tgl_lahir = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control','type': 'date'}))
@@ -168,8 +173,7 @@ class PegawaiKeluargaForm(ModelForm):
         fields = '__all__'
 
 class PegawaiBankForm(ModelForm):
-    nama = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    nip = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    
     no_rek_bank = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     nama_bank = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     cabang = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))

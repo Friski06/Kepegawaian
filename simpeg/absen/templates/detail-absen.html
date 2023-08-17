@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+    
+{% block content %}
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">Rekap Absen</h1>
+        
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Data Rekap Absen Bulanan
+                    <form method="post">  <!-- Form untuk pilih bulan -->
+                        {% csrf_token %}
+                        <select name="bulan" id="bulan" onchange="this.form.submit()">
+                            <option value="1" {% if selected_month == 1 %}selected{% endif %}>Januari</option>
+                            <option value="2" {% if selected_month == 2 %}selected{% endif %}>Februari</option>
+                            <option value="3" {% if selected_month == 3 %}selected{% endif %}>Maret</option>
+                            <option value="4" {% if selected_month == 4 %}selected{% endif %}>April</option>
+                            <option value="5" {% if selected_month == 5 %}selected{% endif %}>Mei</option>
+                            <option value="6" {% if selected_month == 6 %}selected{% endif %}>Juni</option>
+                            <option value="7" {% if selected_month == 7 %}selected{% endif %}>Juli</option>
+                            <option value="8" {% if selected_month == 8 %}selected{% endif %}>Agustus</option>
+                            <option value="9" {% if selected_month == 9 %}selected{% endif %}>September</option>
+                            <option value="10" {% if selected_month == 10 %}selected{% endif %}>Oktober</option>
+                            <option value="11" {% if selected_month == 11 %}selected{% endif %}>November</option>
+                            <option value="12" {% if selected_month == 12 %}selected{% endif %}>Desember</option>
+                            <!-- Tambahkan pilihan bulan lainnya -->
+                        </select>
+                    </form>
+                    <div>
+                        <a href="{% url 'cetak_absen' %}" class="btn btn-success float-right">Cetak Data Absen ke Excel</a>
+                        <a href="{% url 'cetak_absen_pdf' %}" class="btn btn-danger float-right" style="margin-right: 10px;">Cetak Data Absen ke PDF</a>
+                    </div>
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>NIP</th>
+                                <th>Tanggal</th>
+                                <th>Jam Masuk</th>
+                                <th>Jam Pulang</th>
+                                <th>Jumlah Jam</th>
+                                <th>Jumlah Potongan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for absensi in absen %}
+                            <tr>
+                                <td>{{ absensi.pegawaipribadi.nama }}</td>
+                                <td>{{ absensi.pegawaipribadi.nip }}</td>
+                                <td>{{ absensi.tanggal }}</td>
+                                <td>{{ absensi.masuk }}</td>
+                                <td>{{ absensi.pulang }}</td>
+                                <td>{{ absensi.jumlah_jam }}</td>
+                                <td>{{ absensi.jumlah_potongan_tukin}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="5">Total</th>
+                                <th>{{ total_jumlah_jam }}</th>
+                                <th>{{ total_jumlah_tukin }}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Page Content -->
+{% endblock %}

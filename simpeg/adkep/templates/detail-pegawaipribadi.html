@@ -21,6 +21,18 @@
                             Foto tidak tersedia.
                         </div>
                     {% endif %}
+                    <div class="text-center mt-5">
+                        <a href="{% url 'detail_pegawaipekerjaan' pegawai.user_id %}" class="btn btn-primary" style="width: 200px; height: 40px;"> <i class="fas fa-briefcase"></i> Pekerjaan</a>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'detail_pegawaipendidikan' pegawai.user_id %}" class="btn btn-primary" style="width: 200px; height: 40px;"><i class="fas fa-user-graduate"></i> Pendidikan</a>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'detail_pegawaikeluarga' pegawai.user_id %}" class="btn btn-primary" style="width: 200px; height: 40px;"><i class="fas fa-users"></i> Keluarga</a>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="#" class="btn btn-primary" style="width: 200px; height: 40px;"><i class="fas fa-money-check-alt"></i> Bank</a>
+                    </div>
                 </div>
                 <div class="col-md-8">
                     <table class="table table-bordered">

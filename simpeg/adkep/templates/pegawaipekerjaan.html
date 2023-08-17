@@ -37,11 +37,11 @@
                 </tr>
             </thead>
             <tbody>
-                {% for pegawai in pegawai %}
+                {% for pegawai in pekerjaan %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ pegawai.nama }}</td>
-                    <td>{{ pegawai.nip }}</td>
+                    <td>{{ pegawai.pegawaipribadi.nama }}</td>
+                    <td>{{ pegawai.pegawaipribadi.nip }}</td>
                     <td>{{ pegawai.pegawai }}</td>
                     <td>{{ pegawai.status }}</td>
                     <td>{{ pegawai.posisi }}</td>

@@ -64,12 +64,17 @@
                         </form>
                     </div>
                 </li>
-
+                {% if user.is_superuser or user.user_type == 'admin' %}
                 <!-- Nav Item - Alerts -->
                 <li class="nav-item dropdown no-arrow mx-1">
                     <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-bell fa-fw"></i>
+                        {% if belum %}
+                            <span class="badge badge-danger badge-counter">{{ belum.count }}</span>
+                        {% else %}
+                            <span class="badge badge-danger badge-counter">0</span>
+                        {% endif %}
                         <!-- Counter - Alerts -->
                     </a>
                     <!-- Dropdown - Alerts -->
@@ -78,38 +83,50 @@
                         <h6 class="dropdown-header">
                             Notifikasi 
                         </h6>
-                        <a class="dropdown-item text-center small text-gray-500" href="#">Tampilkan Semua Notifikasi</a>
+                        <a class="dropdown-item text-center small text-gray-500" href="{% url 'notifikasi_absen' %}">Pengajuan Keterlambatan Absesni</a>
                     </div>
                 </li>
-
-                <!-- Nav Item - Messages -->
+                {% else %}
                 <li class="nav-item dropdown no-arrow mx-1">
-                    <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-envelope fa-fw"></i>
-                        <!-- Counter - Messages -->
+                        <i class="fas fa-bell fa-fw"></i>
+                        {% if belum %}
+                            <span class="badge badge-danger badge-counter">{{ belum.count }}</span>
+                        {% else %}
+                            <span class="badge badge-danger badge-counter">0</span>
+                        {% endif %}
+                        <!-- Counter - Alerts -->
                     </a>
-                    <!-- Dropdown - Messages -->
+                    <!-- Dropdown - Alerts -->
                     <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                        aria-labelledby="messagesDropdown">
+                        aria-labelledby="alertsDropdown">
                         <h6 class="dropdown-header">
-                            Surat Perizinan
+                            Notifikasi 
                         </h6>
-                        <a class="dropdown-item text-center small text-gray-500" href="#">Baca Semua Surat</a>
+                        <a class="dropdown-item text-center small text-gray-500" href="{% url 'notifikasi' %}">Pengajuan Cuti</a>
+                        <a class="dropdown-item text-center small text-gray-500" href="{% url 'notifikasi_spt' %}">Pengajuan Spt</a>
                     </div>
                 </li>
+                {% endif %}
+
+
 
                 <div class="topbar-divider d-none d-sm-block"></div>
 
                 <!-- Nav Item - User Information -->
                 <li class="nav-item dropdown no-arrow">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{request.user}}</span>
-                        
-                        <img class="img-profile rounded-circle"
-                            src="{% static 'img/undraw_profile.svg' %}">
-                    </a>
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ request.user }}</span>
+                     
+                         {% if pegawai.foto %}
+                             <img class="img-profile rounded-circle" src="{{ pegawai.foto.url }}">
+                         {% else %}
+                             <img class="img-profile rounded-circle" src="{% static 'img/undraw_profile.svg' %}">
+                         {% endif %}
+                     
+                 </a>
                     <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                         aria-labelledby="userDropdown">
@@ -144,7 +161,7 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-
+            {% if user.is_superuser or user.user_type == 'admin' %}
             <!-- Page Heading -->
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
@@ -154,7 +171,12 @@
                 <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                 <i class="fas fa-download fa-sm text-white-50"></i> Unit</a>
             </div>
-
+            {% else %}
+            <!-- Page Heading -->
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            </div>
+            {% endif %}
             <!-- Content Row -->
             <div class="row">
 

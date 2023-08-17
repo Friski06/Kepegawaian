@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rekap Absen Bulanan</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>NIP</th>
+                <th>Tanggal</th>
+                <th>Jam Masuk</th>
+                <th>Jam Pulang</th>
+                <th>Jumlah Jam</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bawah in dataset %}
+            <tr>
+                <td>{{ bawah.pegawaipribadi.nama }}</td>
+                <td>{{ bawah.pegawaipribadi.nip }}</td>
+                <td>{{ bawah.tanggal }}</td>
+                <td>{{ bawah.masuk }}</td>
+                <td>{{ bawah.pulang }}</td>
+                <td>{{ bawah.jumlah_jam }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

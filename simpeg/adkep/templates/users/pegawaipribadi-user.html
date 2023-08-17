@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+<!-- Notifikasi -->>
 
 {% block content %}
 <div class="container-fluid">
@@ -23,6 +24,23 @@
                             Foto tidak tersedia.
                         </div>
                     {% endif %}
+                
+                    <div class="text-center mt-5">
+                        <a href="{% url 'user_pegawaipekerjaan'  %}" class="btn btn-primary" style="width: 200px; height: 40px;"> <i class="fas fa-briefcase"></i> Pekerjaan</a>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'pegawaibawahan'  %}" class="btn btn-primary" style="width: 200px; height: 40px;"> <i class="fas fa-user-friends"></i> Bawahan</a>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'user_pegawaipendidikan'  %}" class="btn btn-primary" style="width: 200px; height: 40px;"><i class="fas fa-user-graduate"></i> Pendidikan</a>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'user_pegawaikeluarga' %}" class="btn btn-primary" style="width: 200px; height: 40px;"><i class="fas fa-users"></i> Keluarga</a>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'user_pegawaibank' %}" class="btn btn-primary" style="width: 200px; height: 40px;"><i class="fas fa-money-check-alt"></i> Bank</a>
+                    </div>
+
                 </div>
                 <div class="col-md-8">
                     <table class="table table-bordered">
@@ -30,10 +48,6 @@
                             <tr>
                                 <th>NAMA:</th>
                                 <td>{{ pegawai.nama }}</td>
-                            </tr>
-                            <tr>
-                                <th>EMAIL:</th>
-                                <td>{{ pegawai.email }}</td>
                             </tr>
                             <tr>
                                 <th>NO HP:</th>

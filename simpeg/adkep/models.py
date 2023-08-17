@@ -13,6 +13,19 @@ class JabatanStruktural(models.Model):
         return self.nama_jabatan
     
 #atasan
+class JabtanAtasan(models.Model):
+    nama_jabatan = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nama_jabatan
+
+#bawahan
+class JabatanBawahan(models.Model):
+    nama_jabatan = models.CharField(max_length=100)
+    atasan = models.ForeignKey(JabtanAtasan, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nama_jabatan
 
 # provinsi
 class Provinsi(models.Model):
@@ -29,10 +42,46 @@ class Kabupaten(models.Model):
         return self.nama_kabupaten
 
 
+#pribadi
+class PegawaiPribadi(models.Model):
+    foto = models.ImageField(upload_to='pegawai/', null=True, blank=True)
+    nama = models.CharField(max_length=40)
+    nrp_kontrak = models.CharField(max_length=20)
+    nrp_tetap = models.CharField(max_length=20)
+    nip = models.CharField(max_length=20)
+    gelar = models.CharField(max_length=20)
+    JENIS_KELAMIN_CHOICES = [
+        ('L', 'Laki-laki'),
+        ('P', 'Perempuan'),
+    ]
+    jenis_kelamin = models.CharField(choices=JENIS_KELAMIN_CHOICES, max_length=1)
+    tgl_lahir = models.DateField()
+    GOLONGAN_DARAH_CHOICES = [
+        ('A', 'A'),
+        ('B', 'B'),
+        ('AB', 'AB'),
+        ('O', 'O'),
+    ]
+    gol_darah = models.CharField(choices=GOLONGAN_DARAH_CHOICES, max_length=2)
+    agama = models.CharField(max_length=20)
+    jalan = models.CharField(max_length=50)
+    nmr_rumah = models.CharField(max_length=10)
+    desa = models.CharField(max_length=50)
+    kecamatan = models.CharField(max_length=50)
+    kabupaten = models.CharField(max_length=50)
+    provinsi = models.CharField(max_length=50)
+    kode_pos = models.CharField(max_length=10)
+    tlp_rumah = models.CharField(max_length=20)
+    hp = models.CharField(max_length=20)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,primary_key=True)
+    
+    def __str__(self):
+        return self.nama
+
+
  #pekerjaan
 class PegawaiPekerjaan(models.Model):
-    nama = models.CharField(max_length=40, null=True)
-    nip = models.CharField(max_length=20,null= True)
+    
     mulai_kerja = models.DateField()
     lama_kerja = models.IntegerField()
     PEGAWAI_CHOICES = [
@@ -90,15 +139,14 @@ class PegawaiPekerjaan(models.Model):
     gol = models.CharField(max_length=10, null=True, blank=True)
     sertifikasi_dosen = models.ImageField(upload_to='pegawaipekerjaan/', null=True, blank=True)
     no_sertifikasi_dosen = models.CharField(max_length=20, null=True, blank=True)
-    jabatan = models.CharField(max_length=100, null=True, blank=True)
-
+    jabatan = models.ForeignKey(JabatanBawahan,on_delete=models.CASCADE,max_length=100, null=True)
+    pegawaipribadi = models.ForeignKey(PegawaiPribadi, on_delete=models.CASCADE, null=True)
     def __str__(self):
         return f"Pegawai Pekerjaan: {self.id}"
     
 #pendidikan
 class PegawaiPendidikan(models.Model):
-    nama = models.CharField(max_length=40,null=True)
-    nip = models.CharField(max_length=20, null=True)
+    
     pendidikan_terakhir = models.CharField(max_length=50)
     perguruan = models.CharField(max_length=100, null=True, blank=True)
     bidang = models.CharField(max_length=100, null=True, blank=True)
@@ -107,14 +155,13 @@ class PegawaiPendidikan(models.Model):
     organisasi_profesi = models.CharField(max_length=100, null=True, blank=True)
     kurun_waktu = models.CharField(max_length=100, null=True, blank=True)
     tingkat = models.CharField(max_length=100, null=True, blank=True)
-    
+    pegawaipribadi = models.ForeignKey(PegawaiPribadi, on_delete=models.CASCADE, null=True)
     def __str__(self):
         return f"Pegawai Pendidikan: {self.id}"
     
 #keluarga
 class PegawaiKeluarga(models.Model):
-    nama = models.CharField(max_length=40, null=True)
-    nip = models.CharField(max_length=20,null=True)
+    
     nama_pasangan = models.CharField(max_length=40, null=True, blank=True)
     tempat_lahir = models.CharField(max_length=50, null=True, blank=True)
     tgl_lahir = models.DateField(null=True, blank=True)
@@ -133,14 +180,13 @@ class PegawaiKeluarga(models.Model):
     jk8 = models.CharField(choices=JENIS_KELAMIN_CHOICES, max_length=1, null=True, blank=True)
     tgl_lahir_a3 = models.DateField(null=True, blank=True)
     jumlah_anak = models.PositiveIntegerField(null=True, blank=True)
-    
+    pegawaipribadi = models.ForeignKey(PegawaiPribadi, on_delete=models.CASCADE, null=True)
     def __str__(self):
         return f"Pegawai Keluarga: {self.id}"
     
 #bank
 class PegawaiBank(models.Model):
-    nama = models.CharField(max_length=40, null=True)
-    nip = models.CharField(max_length=20, null=True)
+   
     no_rek_bank = models.CharField(max_length=20, null=True, blank=True)
     nama_bank = models.CharField(max_length=50, null=True, blank=True)
     cabang = models.CharField(max_length=50, null=True, blank=True)
@@ -148,46 +194,9 @@ class PegawaiBank(models.Model):
     npwp = models.CharField(max_length=20, null=True, blank=True)
     no_bpjs_tenagakerja = models.CharField(max_length=20, null=True, blank=True)
     no_bpjs_kesehatan = models.CharField(max_length=20, null=True, blank=True)
-
+    pegawaipribadi = models.ForeignKey(PegawaiPribadi, on_delete=models.CASCADE, null=True)
     def __str__(self):
         return f"Pegawai Bank: {self.id}" 
 
-#pribadi
-class PegawaiPribadi(models.Model):
-    foto = models.ImageField(upload_to='pegawai/', null=True, blank=True)
-    nama = models.CharField(max_length=40)
-    nrp_kontrak = models.CharField(max_length=20)
-    nrp_tetap = models.CharField(max_length=20)
-    nip = models.CharField(max_length=20)
-    gelar = models.CharField(max_length=20)
-    JENIS_KELAMIN_CHOICES = [
-        ('L', 'Laki-laki'),
-        ('P', 'Perempuan'),
-    ]
-    jenis_kelamin = models.CharField(choices=JENIS_KELAMIN_CHOICES, max_length=1)
-    tgl_lahir = models.DateField()
-    GOLONGAN_DARAH_CHOICES = [
-        ('A', 'A'),
-        ('B', 'B'),
-        ('AB', 'AB'),
-        ('O', 'O'),
-    ]
-    gol_darah = models.CharField(choices=GOLONGAN_DARAH_CHOICES, max_length=2)
-    agama = models.CharField(max_length=20)
-    jalan = models.CharField(max_length=50)
-    nmr_rumah = models.CharField(max_length=10)
-    desa = models.CharField(max_length=50)
-    kecamatan = models.CharField(max_length=50)
-    kabupaten = models.CharField(max_length=50)
-    provinsi = models.CharField(max_length=50)
-    kode_pos = models.CharField(max_length=10)
-    tlp_rumah = models.CharField(max_length=20)
-    hp = models.CharField(max_length=20)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,primary_key=True)
-    pekerjaan = models.ForeignKey(PegawaiPekerjaan, on_delete=models.CASCADE, null=True, blank=True)
-    pendidikan = models.ForeignKey(PegawaiPendidikan, on_delete=models.CASCADE, null=True, blank=True)
-    
-    def __str__(self):
-        return self.nama
 
     

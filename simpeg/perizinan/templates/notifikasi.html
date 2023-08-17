@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Pengajuan Cuti Bawahan</h1>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Daftar Pengajuan Cuti Bawahan</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                        
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Bawahan</th>
+                            <th>Jabatan</th>
+                            <th>Keperluan</th>
+                            <th>status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bawah in bawahan %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ bawah.pegawaipribadi.nama }}</td>
+                            <td>{{ bawah.jabatan }}</td>
+                            <td>{{ bawah.keperluan }}</td>
+                            <td>{{ bawah.verifikasi_kaunit }}</td>
+                       
+                        <td>
+                            {% if bawah.verifikasi_kaunit == 'BELUM' %}
+                             <a href="{% url 'setuju_cuti' bawah.id %}" class="btn btn-primary"><i class="fas fa-check-circle"></i></a>
+                            {% endif %}
+                        </td>
+                        <div class="modal" id="hapus-{{ cuti.id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title">Hapus</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        Apakah anda yakin ingin menghapus?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="#" class="btn btn-danger">Hapus</a>
+                                        <button class="btn btn-dark" data-dismiss="modal">Tidak</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}

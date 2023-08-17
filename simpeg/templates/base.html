@@ -18,15 +18,17 @@
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-TvmXGwH1VL8zDeb/Wfn+6GMg6jSDFZ6PDsVEn3nXZxL/80pbSke1fvSfTNWktjIBHzvbwW5BbllnIsP2yQ3Bw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
      <!-- Custom styles for this page -->
      <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
-
+    
 </head>
 
 <body id="page-top">
-
+    
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -60,44 +62,20 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             {% if user.is_superuser or user.user_type == 'admin' %}
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                            aria-expanded="true" aria-controls="collapseTwo">
-                            <i class="fas fa-user"></i>
-                            <span>Data Pegawai</span>
-                        </a>
-                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Data:</h6>
-                                <a class="collapse-item" href="{% url 'pegawaipribadi' %}">Data Pribadi</a>
-                                <a class="collapse-item" href="{% url 'pegawaipendidikan' %}">Data Pendidikan</a>
-                                <a class="collapse-item" href="{% url 'pegawaipekerjaan' %}">Data Pekerjaan</a>
-                                <a class="collapse-item" href="{% url 'pegawaikeluarga' %}">Data Keluarga</a>
-                                <a class="collapse-item" href="{% url 'pegawaibank' %}">Data Bank</a>
-                            </div>
-                        </div>
-                    </li>
+            <li class="nav-item">
+                    <a class="nav-link" href="{% url 'pegawaipribadi' %}">
+                        <i class="fas fa-user"></i>
+                    <span>Data Pegawai</span></a>
+            </li>
                 {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                            aria-expanded="true" aria-controls="collapseTwo">
-                            <i class="fas fa-user"></i>
-                            <span>Data Pegawai</span>
-                        </a>
-                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Data:</h6>
-                                <a class="collapse-item" href="{% url 'user_pegawaipribadi' %}">Data Pribadi</a>
-                                <a class="collapse-item" href="{% url 'user_pegawaipendidikan' %}">Data Pendidikan</a>
-                                <a class="collapse-item" href="{% url 'user_pegawaipekerjaan' %}">Data Pekerjaan</a>
-                                <a class="collapse-item" href="{% url 'user_pegawaikeluarga' %}">Data Keluarga</a>
-                                <a class="collapse-item" href="{% url 'user_pegawaibank' %}">Data Bank</a>
-                            </div>
-                        </div>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'user_pegawaipribadi' %}">
+                        <i class="fas fa-user"></i>
+                    <span>Data Pegawai</span></a>
+                 </li>
                 {% endif %}
             <!-- Nav Item - Utilities Collapse Menu -->
-            {% if user.is_superuser or user.user_type == 'kaunit' %}
+            {% if user.is_superuser or user.user_type == 'admin' %}
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
@@ -141,7 +119,7 @@
             <div class="sidebar-heading">
                 Form Pengajuan
             </div>
-
+            {% if user.is_superuser or user.user_type == 'admin' %}
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
@@ -159,6 +137,26 @@
                     </div>
                 </div>
             </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                    aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-calendar-week"></i>
+                    <span>Cuti,Izin & Spt</span>
+                </a>
+                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Cuti,Izin:</h6>
+                        <a class="collapse-item" href="{% url 'user_cutiizin' %}">Cuti,Izin</a>
+                        <div class="collapse-divider"></div>
+                        <h6 class="collapse-header">Surat Perintah Tugas:</h6>
+                        <a class="collapse-item" href="{%  url 'user_spt' %}">Spt</a>
+                    </div>
+                </div>
+            </li>
+            {% endif %}
+
+            {% if user.is_superuser or user.user_type == 'admin' or user.user_type == 'kaunit' %}
              <!-- Heading -->
              <div class="sidebar-heading">
                Penilaian
@@ -170,6 +168,21 @@
                     <i class="fas fa-marker"></i>
                     <span>Penilaian</span></a>
             </li>
+            {% else %}
+
+             <!-- Heading -->
+             <div class="sidebar-heading">
+                Penilaian
+             </div>
+ 
+             <!-- Nav Item - Charts -->
+             <li class="nav-item">
+                 <a class="nav-link" href="{% url 'nilai_user' %}">
+                     <i class="fas fa-marker"></i>
+                     <span>Penilaian</span></a>
+             </li>
+             {% endif %}
+
              <!-- Nav Item - Charts -->
              <li class="nav-item">
                 <a class="nav-link" href="{% url 'tolakukur' %}">

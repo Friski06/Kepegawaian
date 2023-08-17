@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-2">
+    </div>
+    
+            <div class="card" style="width:60%; margin-bottom: 100px  ">
+                <div class="card-body">
+            <h2>
+               Nilai
+            </h2>
+            {% if pesan %}
+            <div class="alert alert-success">{{ pesan }}</div>
+            {% endif %}
+            <form action="{% url 'tambah_nilai' pegawaipribadi_id %}" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="hidden" name="pegawaipribadi_id" value="{{ pegawaipribadi_id }}">
+                <button class="btn btn-primary">Tambah</button>
+                <a href="/dashboard" class="btn btn-danger">Kembali</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

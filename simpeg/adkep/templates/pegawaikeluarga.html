@@ -54,7 +54,7 @@
                     <td>
                         <center>
                             <a href="{% url 'ubah_pegawaikeluarga' pegawai.id %}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
-                            <a href="{% url 'detail_pegawaikeluarga' %}" class="btn btn-primary"><i class="fas fa-info-square"></i></a>
+                            <a href="{% url 'detail_pegawaikeluarga' pegawai.id %}" class="btn btn-primary"><i class="fas fa-info-square"></i></a>
                             <!-- Button trigger modal -->
                             <button data-toggle="modal" data-target="#hapus-{{ pegawai.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                         </center>

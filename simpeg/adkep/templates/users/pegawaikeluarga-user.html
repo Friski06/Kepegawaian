@@ -12,15 +12,15 @@
                     <a href="{% url 'tambah_pegawai_keluarga' %}"class="btn btn-primary">Tambah</a>
                 </h2>
                 <table class="table table-bordered">
-                    {% for pegawai in pegawai %}
+                    {% for pegawai in keluarga %}
                     <tbody>
                         <tr>
                             <th>Nama :</th>
-                            <td>{{ pegawai.nama }}</td>
+                            <td>{{ pegawai.pegawaipribadi.nama }}</td>
                         </tr>
                         <tr>
                             <th>Nip :</th>
-                            <td>{{ pegawai.perguruan_d3 }}</td>
+                            <td>{{ pegawai.pegawaipribadi.nip }}</td>
                         </tr>
                         <tr>
                             <th>Nama Pasangan :</th>

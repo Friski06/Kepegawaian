@@ -19,7 +19,7 @@
             <form action="/tambah-spt/"method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-            
+                <input type="hidden" value="belum" name="status">
                 <button class="btn btn-primary">Tambah</button>
                 <a href="/spt"class="btn btn-danger">Kembali</a>
             </form>
