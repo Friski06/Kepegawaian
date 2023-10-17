@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="container-fluid">
-
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-2">
     </div>
@@ -27,89 +25,66 @@
                 
                 </div>
                 <div class="col-md-8">
-                    <table class="table table-bordered">
+                    <table id="pegawaiTable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>NAMA</th>
+                                <th>NIP</th>
+                                <th>MULAI BEKERJA</th>
+                                <th>WAKTU LAMA BEKERJA</th>
+                                <th>JENIS PEGAWAI</th>
+                                <th>STATUS JABATAN</th>
+                                <th>POSISI JABATAN</th>
+                                <th>UNIT</th>
+                                <th>PORGRAM STUDI</th>
+                                <th>TANGGAL BERHENTI KERJA</th>
+                                <th>ALASAN BERHENTI KERJA</th>
+                                <th>JABATAN STRUKTURAL</th>
+                                <th>TMT</th>
+                                <th>TST</th>
+                                <th>NIDN/NUP/NITK/NIDK</th>
+                                <th>JABATAN FUNGSIONAL</th>
+                                <th>GOLONGAN</th>
+                                <th>NOMOR SERTIFIKASI DOSEN</th>
+                            </tr>
+                        </thead>
                         <tbody>
+                           
                             <tr>
-                                <th>NAMA:</th>
                                 <td>{{ pegawai.pegawaipribadi.nama }}</td>
-                            </tr>
-                            <tr>
-                                <th>NIP:</th>
                                 <td>{{ pegawai.pegawaipribadi.nip }}</td>
-                            </tr>
-                            <tr>
-                                <th>MULAI BEKERJA:</th>
                                 <td>{{ pegawai.mulai_kerja }}</td>
-                            </tr>
-                            <tr>
-                                <th>WAKTU LAMA BEKERJA:</th>
                                 <td>{{ pegawai.lama_kerja }}</td>
-                            </tr>
-                            <tr>
-                                <th>JENIS PEGAWAI:</th>
                                 <td>{{ pegawai.pegawai }}</td>
-                            </tr>
-                            <tr>
-                                <th>STATUS JABATAN:</th>
                                 <td>{{ pegawai.status }}</td>
-                            </tr>
-                            <tr>
-                                <th>POSISI JABATAN:</th>
                                 <td>{{ pegawai.posisi }}</td>
-                            </tr>
-                            <tr>
-                                <th>UNIT:</th>
                                 <td>{{ pegawai.unit }}</td>
-                            </tr>
-                            <tr>
-                                <th>PORGRAM STUDI:</th>
                                 <td>{{ pegawai.program_studi }}</td>
-                            </tr>
-                            <tr>
-                                <th>TANGGAL BERHENTI KERJA:</th>
                                 <td>{{ pegawai.berhenti_kerja }}</td>
-                            </tr>
-                            <tr>
-                                <th>ALASAN BERHENTI KERJA:</th>
                                 <td>{{ pegawai.alasan }}</td>
-                            </tr>
-                            <tr>
-                                <th>JABATAN STRUKTURAL:</th>
                                 <td>{{ pegawai.jabatan }}</td>
-                            </tr>
-                            <tr>
-                                <th>TMT:</th>
                                 <td>{{ pegawai.tmt }}</td>
-                            </tr>
-                            <tr>
-                                <th>TST:</th>
                                 <td>{{ pegawai.tst }}</td>
-                            </tr>
-                            <tr>
-                                <th>NIDN/NUP/NITK/NIDK:</th>
                                 <td>{{ pegawai.NIDN_NUP_NITL_NIDK }}</td>
-                            </tr>
-                            <tr>
-                                <th>JABATAN FUNGSIONAL:</th>
                                 <td>{{ pegawai.jabatan_fungsional }}</td>
-                            </tr>
-                            <tr>
-                                <th>GOLONGAN:</th>
                                 <td>{{ pegawai.gol }}</td>
-                            </tr>
-                            <tr>
-                                <th>NOMOR SERTIFIKASI DOSEN:</th>
                                 <td>{{ pegawai.no_sertifikasi_dosen }}</td>
                             </tr>
+                            {% endfor %}
                         </tbody>
-                        {% endfor %}
                     </table>
                 </div>
             </div>
             <a href="/dashboard" class="btn btn-danger">Kembali</a>
         </div>
     </div>
-
 </div>
+
+<script src="path_to_your_datatables_library/datatables.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#pegawaiTable').DataTable();
+});
+</script>
 
 {% endblock content %}

@@ -32,7 +32,13 @@
                             <td>{{ bawah.pegawaipribadi.nama }}</td>
                             <td>{{ bawah.jabatan }}</td>
                             <td>{{ bawah.keperluan }}</td>
-                            <td>{{ bawah.verifikasi_kaunit }}</td>
+                            <td>{% if bawah.verifikasi_kaunit == 'DISETUJUI' %}
+                                <span style="color: green;">{{ bawah.verifikasi_kaunit }}</span>
+                                {% elif bawah.verifikasi_kaunit == 'DITOLAK' %}
+                                    <span style="color: red;">{{ bawah.verifikasi_kaunit }}</span>
+                                {% else %}
+                                    <span style="color: yellow;">{{ bawah.verifikasi_kaunit }}</span>
+                                {% endif %}</td>
                        
                         <td>
                             {% if bawah.verifikasi_kaunit == 'BELUM' %}

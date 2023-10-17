@@ -19,6 +19,7 @@
                         <tr>
                             <th>No</th>
                             <th>Nama Bawahan</th>
+                            <th>Foto </th>
                             <th>Jabatan</th>
                         </tr>
                     </thead>
@@ -27,6 +28,9 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ bawah.pegawaipribadi.nama }}</td>
+                            <td>
+                                <img src="{{ bawah.pegawaipribadi.foto.url }}" alt="{{ bawah.pegawaipribadi.nama }}" width="100">
+                            </td>
                             <td>{{ bawah.jabatan }}</td>
                         </tr>
                         {% endfor %}

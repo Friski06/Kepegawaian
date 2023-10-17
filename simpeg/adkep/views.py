@@ -154,9 +154,11 @@ def detail_pegawai_pekerjaan(request, user_id):
 @login_required(login_url='login')
 def tambah_pegawai_pekerjaan(request):
     if request.method == 'POST':
-        form = PegawaiPekerjaanForm(request.POST,request.FILES)
+        form = PegawaiPekerjaanForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            pegawai = form.save(commit=False)  # Tambahkan parameter commit=False untuk sementara
+            pegawai.pegawaipribadi = request.user.pegawaipribadi  # Set nilai user dengan user yang sedang login
+            pegawai.save()
             messages.success(request, 'Data berhasil ditambahkan')
             return redirect('tambah_pegawai_pekerjaan')
     else:
@@ -232,9 +234,11 @@ def detail_pegawai_pendidikan(request, user_id):
 @login_required(login_url='login')
 def tambah_pegawai_pendidikan(request):
     if request.method == 'POST':
-        form = PegawaiPendidikanForm(request.POST,request.FILES)
+        form = PegawaiPendidikanForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            pegawai = form.save(commit=False)  # Tambahkan parameter commit=False untuk sementara
+            pegawai.pegawaipribadi = request.user.pegawaipribadi  # Set nilai user dengan user yang sedang login
+            pegawai.save()
             messages.success(request, 'Data berhasil ditambahkan')
             return redirect('tambah_pegawai_pendidikan')
     else:
@@ -311,9 +315,11 @@ def detail_pegawai_keluarga(request, user_id):
 @login_required(login_url='login')
 def tambah_pegawai_keluarga(request):
     if request.method == 'POST':
-        form = PegawaiKeluargaForm(request.POST)
+        form = PegawaiKeluargaForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            pegawai = form.save(commit=False)  # Tambahkan parameter commit=False untuk sementara
+            pegawai.pegawaipribadi = request.user.pegawaipribadi  # Set nilai user dengan user yang sedang login
+            pegawai.save()
             messages.success(request, 'Data berhasil ditambahkan')
             return redirect('tambah_pegawai_keluarga')
     else:
@@ -388,9 +394,11 @@ def detail_pegawai_bank(request):
 @login_required(login_url='login')
 def tambah_pegawai_bank(request):
     if request.method == 'POST':
-        form = PegawaiBankForm(request.POST)
+        form = PegawaiBankForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            pegawai = form.save(commit=False)  # Tambahkan parameter commit=False untuk sementara
+            pegawai.pegawaipribadi = request.user.pegawaipribadi  # Set nilai user dengan user yang sedang login
+            pegawai.save()
             messages.success(request, 'Data berhasil ditambahkan')
             return redirect('tambah_pegawai_bank')
     else:

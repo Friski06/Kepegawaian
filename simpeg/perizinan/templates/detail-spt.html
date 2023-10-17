@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Nama-Nama Yang Ada Dalam Surat Perintah Tugas</h2>
+    <h3>{{ spt.pegawai_nama }}</h3>
+    <!-- Tampilkan informasi lain dari model Spt -->
+    
+    <hr>
+    
+    <h4>FILE PDF SURAT PERINTAH TUGAS(SPT)</h4>
+    <p>Nama Yang Mengajukan SPT: {{ upload_spt.pegawaipribadi }}</p>
+    <p>Dari Tanggal : {{spt.tgl_mulai_kegiatan}}</p>
+    <p>Sampai Tanggal : {{spt.tgl_selesai_kegiatan}}</p>
+    <p>PDF File: <a href="{{ upload_spt.pdf_file.url }}" target="_blank">{{ upload_spt.pdf_file.name }}</a></p>
+</div>
+{% endblock content %}

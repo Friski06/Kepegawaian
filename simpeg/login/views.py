@@ -4,10 +4,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import UserLoginForm, UserRegistrationForm
 
+
 def user_login(request):
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            if not recaptcha_response:
+                form.add_error(None, 'Silakan isi reCAPTCHA.')
+                return render(request, 'login.html', {'form': form})
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user = authenticate(request, email=email, password=password)
@@ -35,7 +40,7 @@ def user_register(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, 'Data berhasil disimpan.')
-                return redirect('dashboard')
+                return redirect('login')
         else:
             messages.error(request, 'Periksa Kembali !!.')
     else:

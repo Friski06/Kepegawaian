@@ -26,6 +26,13 @@ class JabatanBawahan(models.Model):
 
     def __str__(self):
         return self.nama_jabatan
+    
+class KoneksiAtasanBawahan(models.Model):
+    atasan = models.ForeignKey(JabtanAtasan, on_delete=models.CASCADE)
+    bawahan = models.ForeignKey(JabatanBawahan, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.atasan} - {self.bawahan}'
 
 # provinsi
 class Provinsi(models.Model):
@@ -120,6 +127,7 @@ class PegawaiPekerjaan(models.Model):
         ('pusat_perencanaan_dan_pengembangan', 'Pusat Perencanaan Dan Pengembangan'),
         ('pusat_data_dan_akreditasi', 'Pusat Data Dan Akreditasi'),
         ('pusat_pengawasan_pengadilan_internal', 'Pusat Pengawasan Pengadilan Internal'),
+        ('kosong', '-')
     ]
     unit = models.CharField(choices=UNIT_CHOICES, max_length=100)
     PRODI_CHOICES = [
@@ -127,7 +135,7 @@ class PegawaiPekerjaan(models.Model):
         ('akutansi', 'Akutansi'),
         ('teknik informasi', 'Teknologi Informasi'),
         ('mekatronika', 'Mekatronika'),
-        ('STAF', 'Staf')
+        ('STAF', '-')
     ]
     program_studi = models.CharField(choices=PRODI_CHOICES, max_length=30)
     berhenti_kerja = models.DateField(null=True, blank=True)
@@ -161,24 +169,23 @@ class PegawaiPendidikan(models.Model):
     
 #keluarga
 class PegawaiKeluarga(models.Model):
-    
+    JK_CHOICES = [
+        ('L', 'Laki-laki'),
+        ('P', 'Perempuan'),
+    ]
     nama_pasangan = models.CharField(max_length=40, null=True, blank=True)
     tempat_lahir = models.CharField(max_length=50, null=True, blank=True)
     tgl_lahir = models.DateField(null=True, blank=True)
     hp = models.CharField(max_length=20, null=True, blank=True)
-    anak1 = models.CharField(max_length=40, null=True, blank=True)
-    JENIS_KELAMIN_CHOICES = [
-        ('L', 'Laki-laki'),
-        ('P', 'Perempuan'),
-    ]
-    jk4 = models.CharField(choices=JENIS_KELAMIN_CHOICES, max_length=1, null=True, blank=True)
-    tgl_lahir_a1 = models.DateField(null=True, blank=True)
-    anak2 = models.CharField(max_length=40, null=True, blank=True)
-    tgl_lahir_a2 = models.DateField(null=True, blank=True)
-    jk6 = models.CharField(choices=JENIS_KELAMIN_CHOICES, max_length=1, null=True, blank=True)
-    anak3 = models.CharField(max_length=40, null=True, blank=True)
-    jk8 = models.CharField(choices=JENIS_KELAMIN_CHOICES, max_length=1, null=True, blank=True)
-    tgl_lahir_a3 = models.DateField(null=True, blank=True)
+    anak1 = models.CharField(max_length=100, blank=True, null=True)
+    jk4 = models.CharField(max_length=10, choices=JK_CHOICES, blank=True, null=True)
+    tgl_lahir_a1 = models.DateField(blank=True, null=True)
+    anak2 = models.CharField(max_length=100, blank=True, null=True)
+    jk6 = models.CharField(max_length=10, choices=JK_CHOICES, blank=True, null=True)
+    tgl_lahir_a2 = models.DateField(blank=True, null=True)
+    anak3 = models.CharField(max_length=100, blank=True, null=True)
+    jk8 = models.CharField(max_length=10, choices=JK_CHOICES, blank=True, null=True)
+    tgl_lahir_a3 = models.DateField(blank=True, null=True)
     jumlah_anak = models.PositiveIntegerField(null=True, blank=True)
     pegawaipribadi = models.ForeignKey(PegawaiPribadi, on_delete=models.CASCADE, null=True)
     def __str__(self):

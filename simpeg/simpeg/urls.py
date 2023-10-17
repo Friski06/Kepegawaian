@@ -6,6 +6,7 @@ from penilaian.views import *
 from absen.views import *
 from dashboard.views import *
 from login.views import *
+from codmesin.mesin import *
 from django.conf.urls.static import static
 
 
@@ -16,7 +17,7 @@ urlpatterns = [
     path('logout/', logout, name='logout_view'),
     path('register/',user_register, name='register'),
     path('forgot_password/', forgot_password, name='forgot_password'),
-    path('tambah-jabatan/', tambah_jabatan, name='tambah_jabatan'),
+    path('tambah-jabatan/<int:jabatan_id>', tambah_jabatan, name='tambah_jabatan'),
 #{
     #pegawaipribadi
     path('pegawaipribadi/',pegawaipribadi, name='pegawaipribadi'),
@@ -32,7 +33,7 @@ urlpatterns = [
     #pegawai pekerjaan
     path('pegawaipekerjaan/', pegawaipekerjaan, name='pegawaipekerjaan'),
 
-    path('users/pegawaipekerjaan-user/', pegawaipekerjaan_user, name='user_pegawaipekerjaan'),
+    path('users/pegawaipribadi-user/pekerjaan', pegawaipekerjaan_user, name='user_pegawaipekerjaan'),
 
     path('tambah-pegawai-pekerjaan/', tambah_pegawai_pekerjaan, name='tambah_pegawai_pekerjaan'),
     path('pegawaipekerjaan/ubah/<int:user_id>', ubah_pegawai_pekerjaan, name='ubah_pegawaipekerjaan'),
@@ -42,17 +43,17 @@ urlpatterns = [
     #pegawai pendidikan
     path('pegawaipendidikan/', pegawaipendidikan, name='pegawaipendidikan'),
 
-    path('users/pegawaipendidikan-user/', pegawaipendidikan_user, name='user_pegawaipendidikan'),
+    path('users/pegawaipribadi-user/pendidikan', pegawaipendidikan_user, name='user_pegawaipendidikan'),
 
     path('tambah-pegawai-pendidikan/', tambah_pegawai_pendidikan, name='tambah_pegawai_pendidikan'),
     path('pegawaipendidikan/ubah/<int:user_id>', ubah_pegawai_pendidikan, name='ubah_pegawaipendidikan'),
     path('pegawaipendidikan/hapus/<int:user_id>', hapus_pegawai_pendidikan, name='hapus_pegawaipendidikan'),
-    path('detail-pegawaipendidikan/detail/<int:pegawaipribadi_id>/', detail_pegawai_pendidikan, name='detail_pegawaipendidikan'),
+    path('detail-pegawaipendidikan/detail/<int:user_id>/', detail_pegawai_pendidikan, name='detail_pegawaipendidikan'),
 
     #pegawai kelaurga
     path('pegawaikeluarga/', pegawaikeluarga, name='pegawaikeluarga'),
 
-    path('users/pegawaikeluarga-user/', pegawaikeluarga_user, name='user_pegawaikeluarga'),
+    path('users/pegawaipribadi-user/keluarga', pegawaikeluarga_user, name='user_pegawaikeluarga'),
 
     path('tambah-pegawai-keluarga/', tambah_pegawai_keluarga, name='tambah_pegawai_keluarga'),
     path('pegawaikeluarga/ubah/<int:user_id>', ubah_pegawai_keluarga, name='ubah_pegawaikeluarga'),
@@ -62,7 +63,7 @@ urlpatterns = [
     #pegawai bank
     path('pegawaibank/', pegawaibank, name='pegawaibank'),
 
-    path('users/pegawaibank-user/', pegawaibank_user, name='user_pegawaibank'),
+    path('users/pegawaipribadi-user/bank', pegawaibank_user, name='user_pegawaibank'),
 
     path('tambah-pegawai-bank/', tambah_pegawai_bank, name='tambah_pegawai_bank'),
     path('pegawaibank/ubah/<int:id_pegawaibank>', ubah_pegawai_bank, name='ubah_pegawaibank'),
@@ -80,9 +81,9 @@ urlpatterns = [
     path('detailabsen/<int:pegawaipribadi_id>', detail_absen, name='detailabsen'),
     path('rekap_absen_bulanan/', rekap_absen_bulanan, name='rekapabsen'),
     path('users/rekap_absen_user/', rekap_absen_user, name='rekapabsen_user'),
-    path('cetak_absen/', cetak_rekap_absen, name='cetak_absen'),
+    path('cetak_absen/<str:periode>/<int:pegawaipribadi_id>', cetak_rekap_absen, name='cetak_absen'),
     path('cetak_absen_pdf/', cetak_rekap_absen_pdf, name='cetak_absen_pdf'),
-    path('cetak_absen_pdf/', cetak_rekap_absen_user_pdf, name='cetak_absen_user_pdf'),
+    path('cetak_absen_pdf_user/', cetak_rekap_absen_user_pdf, name='cetak_absen_user_pdf'),
 # }
 
     #linkcutiizin&spt
@@ -103,18 +104,25 @@ urlpatterns = [
     path('cuti/hapus/<int:id_cuti>', hapus_cuti, name='hapus_cuti'),
     path('spt/hapus/<int:id_spt>', hapus_spt, name='hapus_spt'),
     path('detailcuti/<int:pegawaipribadi_id>', detail_cuti, name='detailcuti'),
+    path('detailspt/<int:spt_id>', detail_spt, name='detailspt'),
     path('cetak_cuti/', cetak_rekap_cuti, name='cetak_cuti'),
-    path('cetak_cuti_pdf/', cetak_rekap_cuti_pdf, name='cetak_cuti_pdf'),
+    path('cetak_cuti_pdf/<str:periode>/<int:pegawaipribadi_id>', cetak_cuti, name='cetak_cuti'),
+    path('cetak_cuti_user_pdf/', cetak_user_cuti_pdf, name='cetak_cuti_user_pdf'),
+    path('rekapcuti/<int:pegawaipribadi_id>', rekap_cuti_user, name='rekap_cuti'),
+    path('upload_spt/', upload_spt, name='upload_spt'),
     
 
     #penilaian
     path('users/nilai-user/', nilai_user, name='nilai_user'),
     path('nilai/', nilai, name='nilai'),
     path('detail_nilai/<int:pegawaipribadi_id>', detail_nilai, name='detail_nilai'),
-     path('detail_nilai/<int:pegawaipribadi_id>', detail_nilai_user, name='detail_nilai_user'),
+    path('detail_nilai/<int:pegawaipribadi_id>', detail_nilai_user, name='detail_nilai_user'),
     path('tambah-nilai/<int:pegawaipribadi_id>', tambah_penilaian,name='tambah_nilai'),
     path('tolakukur/', tolakukur, name='tolakukur'),
-    path('cetak_nilai/', cetak_nilai, name='cetak_nilai'),
+    path('cetak_nilai/<str:periode>/<int:pegawaipribadi_id>', cetak_nilai, name='cetak_nilai'),
+    path('editnilai/edit/<int:pegawaipribadi_id>/', edit_nilai, name='edit_nilai'),
+    path('codmesin/codnmesin/', Mesin, name='codmesin'),
+
 
 ]
 if settings.DEBUG:

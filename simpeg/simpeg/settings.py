@@ -44,6 +44,11 @@ INSTALLED_APPS = [
     'absen',
     'dashboard',
     'login',
+    'captcha',
+    'codmesin',
+
+   
+   
 ]
 
 MIDDLEWARE = [
@@ -138,6 +143,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/login.User'
 LOGOUT_REDIRECT_URL = '/'
+
+RECAPTCHA_PUBLIC_KEY = '6LfqaAEoAAAAAMZSmewkdunn_nIivHA2JEsxJwEU'
+RECAPTCHA_PRIVATE_KEY = '6LfqaAEoAAAAAG3h5yZS_vQeUTsrvj0ZJmw_kmqd'
 
 AUTH_USER_MODEL = "login.User"
 AUTHENTICATION_BACKENDS = ['login.backend.EmailBackend','django.contrib.auth.backends.ModelBackend']

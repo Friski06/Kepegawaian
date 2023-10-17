@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-2">
+    </div>
+    
+    <div class="card" style="width:60%; margin-bottom: 100px;">
+        <div class="card-body">
+            <h2>
+               Edit Nilai Untuk : {{pegawai.pegawaipribadi.nama}}
+            </h2>
+            {% if pesan %}
+            <div class="alert alert-success">{{ pesan }}</div>
+            {% endif %}
+            <form action="{% url 'edit_nilai' pegawaipribadi_id %}" method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="kesopanan">Kesopanan:</label>
+                    <input type="range" id="kesopanan" name="kesopanan" min="0" max="100" step="1" class="form-range">
+                    <span id="kesopanan-value" class="slider-value">50</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="kerapian">Kerapian:</label>
+                    <input type="range" id="kerapian" name="kerapian" min="0" max="100" step="1" class="form-range">
+                    <span id="kerapian-value" class="slider-value">50</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="dedikasi">Dedikasi:</label>
+                    <input type="range" id="dedikasi" name="dedikasi" min="0" max="100" step="1" class="form-range">
+                    <span id="dedikasi-value" class="slider-value">50</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="loyalitas">Loyalitas:</label>
+                    <input type="range" id="loyalitas" name="loyalitas" min="0" max="100" step="1" class="form-range">
+                    <span id="loyalitas-value" class="slider-value">50</span>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="dialog">Disiplin:</label>
+                    <input type="range" id="disiplin" name="disiplin" min="0" max="100" step="1" class="form-range">
+                    <span id="disiplin-value" class="slider-value">50</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="kerjasama">Kerjasama:</label>
+                    <input type="range" id="kerjasama" name="kerjasama" min="0" max="100" step="1" class="form-range">
+                    <span id="kerjasama-value" class="slider-value">50</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="tupoksi">Tupoksi:</label>
+                    <input type="range" id="tupoksi" name="tupoksi" min="0" max="100" step="1" class="form-range">
+                    <span id="tupoksi-value" class="slider-value">50</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="rata_rata">Nilai Huruf:</label>
+                    <span id="nilai_huruf-value" class="slider-value">-</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="rata_rata">Nilai Rata Rata:</label>
+                    <span id="rata_rata-value" class="slider-value">-</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="rata_rata">Potongan:</label>
+                    <span id="potongan-value" class="slider-value">-</span>
+                </div>
+                
+                <!-- Add more range sliders for other fields -->
+                
+                <input type="hidden" name="pegawaipribadi_id" value="{{ pegawaipribadi_id }}">
+                <button class="btn btn-primary">Tambah</button>
+                <a href="/dashboard" class="btn btn-danger">Kembali</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Add event listeners to update slider values dynamically
+    document.getElementById("kesopanan").addEventListener("input", function() {
+        document.getElementById("kesopanan-value").textContent = this.value;
+        // Hitung rata-rata saat slider berubah
+        updateRataRata();
+    });
+    
+    document.getElementById("kerapian").addEventListener("input", function() {
+        document.getElementById("kerapian-value").textContent = this.value;
+        // Hitung rata-rata saat slider berubah
+        updateRataRata();
+    });
+
+    document.getElementById("dedikasi").addEventListener("input", function() {
+        document.getElementById("dedikasi-value").textContent = this.value;
+        // Hitung rata-rata saat slider berubah
+        updateRataRata();
+    });
+
+    document.getElementById("loyalitas").addEventListener("input", function() {
+        document.getElementById("loyalitas-value").textContent = this.value;
+        // Hitung rata-rata saat slider berubah
+        updateRataRata();
+    });
+
+    document.getElementById("kerjasama").addEventListener("input", function() {
+        document.getElementById("kerjasama-value").textContent = this.value;
+        // Hitung rata-rata saat slider berubah
+        updateRataRata();
+    });
+
+    document.getElementById("tupoksi").addEventListener("input", function() {
+        document.getElementById("tupoksi-value").textContent = this.value;
+        // Hitung rata-rata saat slider berubah
+        updateRataRata();
+    });
+
+    document.getElementById("disiplin").addEventListener("input", function() {
+        document.getElementById("disiplin-value").textContent = this.value;
+        // Hitung rata-rata saat slider berubah
+        updateRataRata();
+    });
+
+    // Hitung rata-rata saat halaman dimuat
+    updateRataRata();
+
+    // Add similar event listeners for other sliders
+    function updateRataRata() {
+            // Get values from each slider
+            var kesopanan = parseInt(document.getElementById("kesopanan").value);
+            var kerapian = parseInt(document.getElementById("kerapian").value);
+            var dedikasi = parseInt(document.getElementById("dedikasi").value);
+            var loyalitas = parseInt(document.getElementById("loyalitas").value);
+            var kerjasama = parseInt(document.getElementById("kerjasama").value);
+            var tupoksi = parseInt(document.getElementById("tupoksi").value);
+            var disiplin = parseInt(document.getElementById("disiplin").value);
+
+            // Calculate average score
+            var jumlahKriteria = 7;
+            var totalNilai = kesopanan + kerapian + dedikasi + loyalitas + kerjasama + tupoksi + disiplin;
+            var rataRata = Math.round(totalNilai / jumlahKriteria);
+
+            // Calculate grade and discount
+            var nilaiHuruf, potongan;
+            if (rataRata >= 90) {
+                nilaiHuruf = 'A';
+                potongan = '0%';
+            } else if (rataRata >= 80) {
+                nilaiHuruf = 'B';
+                potongan = '0%';
+            } else if (rataRata >= 70) {
+                nilaiHuruf = 'C';
+                potongan = '1%';
+            } else if (rataRata >= 51) {
+                nilaiHuruf = 'D';
+                potongan = '75%';
+            } 
+            else {
+                nilaiHuruf = 'E';
+                potongan = '100%';
+            }
+
+            // Update the display of grade and discount
+            document.getElementById("rata_rata-value").textContent = rataRata.toFixed(0);
+            document.getElementById("nilai_huruf-value").textContent = nilaiHuruf;
+            document.getElementById("potongan-value").textContent = potongan;
+        }
+</script>
+
+
+{% endblock content %}

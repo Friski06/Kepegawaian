@@ -1,77 +1,66 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="container-fluid">
-
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-2">
     </div>
     <div class="card" style="width:70%; margin-bottom: 100px">
         <div class="card-body">
             <h2>Data Pendidikan Pegawai
-                <a href="{% url 'tambah_pegawai_pendidikan' %}"class="btn btn-primary">Tambah</a>
+                <a href="{% url 'tambah_pegawai_pendidikan'  %}" class="btn btn-primary">Tambah</a>
             </h2>
+            
             <div class="row">
                 <div class="col-md-4">
                     {% for pegawai in pendidikan %}
+                    
                     {% if pegawai.sertifikat_keahlian %}
                         <div class="text-center">
-                            <img src="{{ pegawai.sertifikat_keahlian.url }}" alt="Foto Pegawai" class="img-fluid">
+                            <img src="{{ pegawai.sertifikat_keahlian.url }}" alt="Sertifikat" class="img-fluid">
                         </div>
                     {% else %}
                         <div class="text-center">
-                            Foto tidak tersedia.
+                           Sertifikat Tidak Tersedia
                         </div>
                     {% endif %}
+                
                 </div>
                 <div class="col-md-8">
-                    <table class="table table-bordered">
+                    <table id="pegawaiTable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>NAMA</th>
+                                <th>NIP</th>
+                                <th>PENDIDIKAN TERAKHIR</th>
+                                <th>PERGURUAN TERAKHIR</th>
+                                <th>BIDANG TERAKHIR</th>
+                                <th>MASA BERLAKU</th>
+                                <th>ORGANISASI PROFESI</th>
+                                <th>KURUN WAKTU</th>
+                                <th>TINGKAT</th>
+                            </tr>
+                        </thead>
                         <tbody>
+                            
                             <tr>
-                                <th>NAMA:</th>
                                 <td>{{ pegawai.pegawaipribadi.nama }}</td>
-                            </tr>
-                            <tr>
-                                <th>NIP:</th>
                                 <td>{{ pegawai.pegawaipribadi.nip }}</td>
-                            </tr>
-                            <tr>
-                                <th>PENDIDIKAN TERAKHIR:</th>
                                 <td>{{ pegawai.pendidikan_terakhir }}</td>
-                            </tr>
-                            <tr>
-                                <th>PERGURUAN TERAKHIR:</th>
                                 <td>{{ pegawai.perguruan }}</td>
-                            </tr>
-                            <tr>
-                                <th>BIDANG TERAKHIR:</th>
                                 <td>{{ pegawai.bidang }}</td>
-                            </tr>
-                            <tr>
-                                <th>MASA BERLAKU:</th>
                                 <td>{{ pegawai.masa_berlaku }}</td>
-                            </tr>
-                            <tr>
-                                <th>ORGANISASI PROFESI:</th>
                                 <td>{{ pegawai.organisasi_profesi }}</td>
-                            </tr>
-                            <tr>
-                                <th>KURUN WAKTU:</th>
                                 <td>{{ pegawai.kurun_waktu }}</td>
-                            </tr>
-                            <tr>
-                                <th>TINGKAT:</th>
                                 <td>{{ pegawai.tingkat }}</td>
                             </tr>
+                            {% endfor %}
                         </tbody>
-                        {% endfor %}
                     </table>
                 </div>
             </div>
             <a href="/dashboard" class="btn btn-danger">Kembali</a>
         </div>
     </div>
-
 </div>
 
 {% endblock content %}

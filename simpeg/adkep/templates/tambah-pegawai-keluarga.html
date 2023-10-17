@@ -1,29 +1,101 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <div class="container-fluid">
-
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-2">
-    </div>
-    <div class="card" style="width:60%; margin-bottom: 100px  ">
+    <div class="card" style="width:70%; margin-bottom: 100px">
         <div class="card-body">
-            <h2>
-                Data Keluarga
-            </h2>
-            {% if pesan %}
-            <div class="alert alert-success">{{ pesan }}</div>
-            {% endif %}
-            <form action="/tambah-pegawai-keluarga/"method="post">
+            <h2>Data Pasangan dan Anak Pegawai</h2>
+            <form method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
-            
-                <button class="btn btn-primary">Tambah Pegawai</button>
-                <a href="/pegawaikeluarga"class="btn btn-danger float-right">Kembali</a>
+                <div class="form-group">
+                    <label for="pilihan">Pilih Kategori:</label>
+                    <select class="form-control" id="pilihan" name="pilihan">
+                        <option value="pasangan">Pasangan</option>
+                        <option value="anak">Anak</option>
+                    </select>
+                </div>
+                <div id="pasanganFields">
+                    <div class="form-group">
+                        <label for="{{ form.nama_pasangan.id_for_label }}">Nama Pasangan:</label>
+                        {{ form.nama_pasangan }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.tempat_lahir.id_for_label }}">Tempat Lahir:</label>
+                        {{ form.tempat_lahir }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.tgl_lahir.id_for_label }}">Tanggal Lahir:</label>
+                        {{ form.tgl_lahir }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.tgl_lahir.id_for_label }}">No Hp:</label>
+                        {{ form.hp }}
+                    </div>
+                </div>
+                <div id="anakFields" style="display: none;">
+                    <div class="form-group">
+                        <label for="{{ form.anak1.id_for_label }}">Nama Anak Pertama:</label>
+                        {{ form.anak1 }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.jk4.id_for_label }}">Jenis Kelamin Anak Pertama:</label>
+                        {{ form.jk4 }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.tgl_lahir_a1.id_for_label }}">Tanggal Lahir Anak Pertama:</label>
+                        {{ form.tgl_lahir_a1 }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.anak2.id_for_label }}">Nama Anak Kedua:</label>
+                        {{ form.anak2 }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.jk6.id_for_label }}">Jenis Kelamin Anak Kedua:</label>
+                        {{ form.jk6 }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.tgl_lahir_a2.id_for_label }}">Tanggal Lahir Anak Kedua:</label>
+                        {{ form.tgl_lahir_a2 }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.anak3.id_for_label }}">Nama Anak Ketiga:</label>
+                        {{ form.anak3 }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.jk8.id_for_label }}">Jenis Kelamin Anak Ketiga:</label>
+                        {{ form.jk8 }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.tgl_lahir_a3.id_for_label }}">Tanggal Lahir Anak Ketiga:</label>
+                        {{ form.tgl_lahir_a3 }}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.jumlah_anak.id_for_label }}">Jumlah Anak:</label>
+                        {{ form.jumlah_anak }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" name="submit">Simpan</button>
             </form>
+            <a href="/dashboard" class="btn btn-danger">Kembali</a>
         </div>
     </div>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const pilihanSelect = document.getElementById("pilihan");
+        const pasanganFields = document.getElementById("pasanganFields");
+        const anakFields = document.getElementById("anakFields");
+
+        pilihanSelect.addEventListener("change", function() {
+            if (pilihanSelect.value === "pasangan") {
+                pasanganFields.style.display = "block";
+                anakFields.style.display = "none";
+            } else if (pilihanSelect.value === "anak") {
+                pasanganFields.style.display = "none";
+                anakFields.style.display = "block";
+            }
+        });
+    });
+</script>
 {% endblock content %}

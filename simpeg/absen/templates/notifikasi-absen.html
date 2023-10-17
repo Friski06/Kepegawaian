@@ -34,7 +34,13 @@
                             <td>{{ bawah.jabatan }}</td>
                             <td>{{ bawah.masuk }}</td>
                             <td>{{ bawah.alasan }}</td>
-                            <td>{{ bawah.status }}</td>
+                            <td>{% if bawah.status == 'DISETUJUI' %}
+                                <span style="color: green;">{{ bawah.status }}</span>
+                                {% elif bawah.status == 'DITOLAK' %}
+                                    <span style="color: red;">{{ bawah.status }}</span>
+                                {% else %}
+                                    <span style="color: yellow;">{{ bawah.status }}</span>
+                                {% endif %}</td>
                        
                         <td>
                             {% if bawah.status == 'BELUM' %}

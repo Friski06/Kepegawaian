@@ -6,10 +6,14 @@ from absen.forms import AbsenForm
 from django.contrib import messages
 from decimal import Decimal
 from django.db.models import Sum
-from absen.resources import AbsenResource
+from absen.resources import AbsenResource, AbsenUserResource
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-
+from io import BytesIO
+from django.db.models import Q
+from datetime import date
+from django.utils import timezone
+from openpyxl import Workbook
 
 
 
@@ -118,11 +122,11 @@ def lupaabsen(request):
         form = AbsenForm(request.POST)
         if form.is_valid():
             absen = form.save(commit=False)
-            
+            absen.pegawaipribadi = request.user.pegawaipribadi
             # Logika pengisian otomatis
             masuk = form.cleaned_data.get('masuk')
             pulang = form.cleaned_data.get('pulang')
-            
+            status = form.cleaned_data.get('status')
             if masuk and pulang:
                 jam_masuk = masuk.hour * 60 + masuk.minute
                 jam_pulang = pulang.hour * 60 + pulang.minute
@@ -136,31 +140,32 @@ def lupaabsen(request):
                     if jam_masuk <= 526:
                         potongan_tukin += Decimal(jumlah_jam) * Decimal('0.005') * Decimal('0.5')
                     elif jam_masuk <= 541:
-                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.005') * Decimal('1.0')
+                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.01') * Decimal('1.0')
                     elif jam_masuk <= 556:
-                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.005') * Decimal('1.5')
+                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.015') * Decimal('1.5')
                     elif jam_masuk <= 571:
-                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.005') * Decimal('2.0')
+                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.02') * Decimal('2.0')
                     elif jam_masuk <= 586:
-                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.005') * Decimal('2.5')
+                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.025') * Decimal('2.5')
                 
                 if jam_pulang < 990:
-                    if jam_pulang >= 975:
+                    if jam_pulang >= 900:
                         potongan_tukin += Decimal(jumlah_jam) * Decimal('0.025') * Decimal('2.5')
-                    elif jam_pulang >= 960:
-                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.025') * Decimal('2.0')
-                    elif jam_pulang >= 945:
-                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.025') * Decimal('1.5')
-                    elif jam_pulang >= 930:
-                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.025') * Decimal('1.0')
-                    elif jam_pulang >= 915:
-                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.025') * Decimal('0.5')
-                    elif jam_pulang >= 890:
-                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.025') * Decimal('0.25')
-                
+                    elif jam_pulang >= 885:
+                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.02') * Decimal('2.0')
+                    elif jam_pulang >= 870:
+                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.015') * Decimal('1.5')
+                    elif jam_pulang >= 855:
+                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.01') * Decimal('1.0')
+                    elif jam_pulang >= 840:
+                        potongan_tukin += Decimal(jumlah_jam) * Decimal('0.005') * Decimal('0.5')
+
+               
+
                 absen.jumlah_potongan_tukin = round(potongan_tukin, 2)
-            
-            absen.save()
+                
+                # Setelah semua perhitungan selesai, simpan data absen
+                absen.save()
             return redirect('absen')
     else:
         form = AbsenForm(initial={'jumlah_jam':0, 'jumlah_potongan_tukin':0})
@@ -235,56 +240,92 @@ def detail_absen(request,pegawaipribadi_id):
     return render(request, 'detail-absen.html', kontext)
 
 @login_required(login_url='login')
-def cetak_rekap_absen(request):
-    
-    absen = AbsenResource()
-    dataset = absen.export(queryset=Absen.objects.filter(pegawaipribadi_id=request.session['_auth_user_id']))
-    response = HttpResponse(dataset.xls, content_type= 'application/vnd.ms-excel' )
-    response['Content-Disposition'] = 'attachment; filename=absen.xls'
-    return response
+def cetak_rekap_absen(request,periode, pegawaipribadi_id):
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.title = "Rekap Absen"
+    current_month = timezone.now().month 
+    pegawai = Absen.objects.filter(pegawaipribadi_id=pegawaipribadi_id)
+    pegawai_bulan = Absen.objects.all()
 
+    if periode == 'bulanan':
+        current_month = timezone.now().month
+        data_absen = pegawai_bulan.filter(tanggal__month=current_month, tanggal__year=timezone.now().year)
+    elif periode == 'semester':
+        current_month = timezone.now().month
+
+        if 3 <= current_month <= 8:
+            data_absen = pegawai.filter(tanggal__month__range=[3, 8], tanggal__year=timezone.now().year)
+        else:
+            data_absen = pegawai.filter(
+                Q(tanggal__month__gte=9) | Q(tanggal__month__lte=2),
+                tanggal__year=timezone.now().year,
+            )
+
+    # Menambahkan header ke baris pertama
+    header = ['No','Nama','Tanggal', 'Potongan']
+    sheet.append(header)
+
+    # Menambahkan data absen ke baris selanjutnya
+    for idx, absen in enumerate(data_absen):
+        row_data = [idx + 1, absen.pegawaipribadi.nama ,absen.tanggal.strftime('%B %Y'), absen.jumlah_potongan_tukin]
+        sheet.append(row_data)
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = f'attachment; filename=RekapAbsen_{periode}.xlsx'
+    workbook.save(response)
+    return response
+  
 @login_required(login_url='login')
 def cetak_rekap_absen_user_pdf(request):
   
+    pegawaipribadi = PegawaiPribadi.objects.first()
+    absen = Absen.objects.filter(pegawaipribadi_id=request.session['_auth_user_id'])
+
     
-   absen_resource = AbsenResource()
-   queryset = Absen.objects.filter(pegawaipribadi_id=request.session['_auth_user_id'])
-   dataset = absen_resource.export(queryset=queryset)
-    
-   template_path = 'cetak-absen.html'  # Ganti dengan path template HTML yang sesuai
-   context = {'dataset': dataset}
-    
-   response = HttpResponse(content_type='application/pdf')
-   response['Content-Disposition'] = 'attachment; filename="absen.pdf"'
-    
-   template = get_template(template_path)
-   html = template.render(context)
-    
-   pisa_status = pisa.CreatePDF(html, dest=response)
-   if pisa_status.err:
-        return HttpResponse('Gagal membuat PDF', content_type='text/plain')
-    
-   return response
+
+    context = {
+        'pegawaipribadi': pegawaipribadi,
+        'absen' : absen,
+        'exporting_pdf': True,
+    }
+
+    template = get_template('users/cetak-absen-user.html')
+    html_content = template.render(context)
+
+    pdf_buffer = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html_content.encode("UTF-8")), pdf_buffer)
+
+    if not pdf.err:
+        response = HttpResponse(pdf_buffer.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="Absen.pdf"'
+        return response
+    return HttpResponse('Error saat menghasilkan PDF', content_type='text/plain')
+
 
 @login_required(login_url='login')
 def cetak_rekap_absen_pdf(request):
   
+    pegawaipribadi = PegawaiPribadi.objects.first()
+    absen = Absen.objects.filter(pegawaipribadi_id=request.session['_auth_user_id'])
+
     
-   absen_resource = AbsenResource()
-   queryset = Absen.objects.filter(pegawaipribadi_id=request.session['_auth_user_id'])
-   dataset = absen_resource.export(queryset=queryset)
-    
-   template_path = 'cetak-absen.html'  # Ganti dengan path template HTML yang sesuai
-   context = {'dataset': dataset}
-    
-   response = HttpResponse(content_type='application/pdf')
-   response['Content-Disposition'] = 'attachment; filename="absen.pdf"'
-    
-   template = get_template(template_path)
-   html = template.render(context)
-    
-   pisa_status = pisa.CreatePDF(html, dest=response)
-   if pisa_status.err:
-        return HttpResponse('Gagal membuat PDF', content_type='text/plain')
-    
-   return response
+
+    context = {
+        'pegawaipribadi': pegawaipribadi,
+        'absen' : absen,
+        'exporting_pdf': True,
+    }
+
+    template = get_template('cetak-absen.html')
+    html_content = template.render(context)
+
+    pdf_buffer = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html_content.encode("UTF-8")), pdf_buffer)
+
+    if not pdf.err:
+        response = HttpResponse(pdf_buffer.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="Absen.pdf"'
+        return response
+    return HttpResponse('Error saat menghasilkan PDF', content_type='text/plain')
+

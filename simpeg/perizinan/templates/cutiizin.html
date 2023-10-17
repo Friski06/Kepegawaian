@@ -41,12 +41,19 @@
                             <td>{{ cuti.keperluan }}</td>
                             <td>{{ cuti.tgl_mulai }}</td>
                             <td>{{ cuti.tgl_selesai }}</td>
-                            <td>{{ cuti.verifikasi_kaunit }}</td>
+                            <td>{% if cuti.verifikasi_kaunit == 'DISETUJUI' %}
+                                <span style="color: green;">{{ cuti.verifikasi_kaunit }}</span>
+                                {% elif cuti.verifikasi_kaunit == 'DITOLAK' %}
+                                    <span style="color: red;">{{ cuti.verifikasi_kaunit }}</span>
+                                {% else %}
+                                    <span style="color: yellow;">{{ cuti.verifikasi_kaunit }}</span>
+                                {% endif %}</td>
                             
                             <td>
                                 <center>
                                     <a href="{% url 'ubah_cuti' cuti.id %}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
                                     <a href="{% url 'detailcuti' cuti.pegawaipribadi_id %}" class="btn btn-primary"><i class="fas fa-eye"></i></a>
+                                    
                                     <!-- Button trigger modal -->
                                     <button data-toggle="modal" data-target="#hapus-{{ cuti.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                                 </center>

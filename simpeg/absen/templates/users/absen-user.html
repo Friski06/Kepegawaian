@@ -22,6 +22,8 @@
                             <th>Tanggal</th>
                             <th>Jam Masuk</th>
                             <th>Alasan</th>
+                            <th>Status</th>
+                            <th>Potongan Hari Ini</th>
                             
                             
                         </tr>
@@ -35,6 +37,14 @@
                             <td>{{ absen.tanggal }}</td>
                             <td>{{ absen.masuk }}</td>
                             <td>{{ absen.alasan}}</td>
+                            <td>{% if absen.status == 'DISETUJUI' %}
+                                <span style="color: green;">{{ absen.status }}</span>
+                                {% elif absen.status == 'DITOLAK' %}
+                                    <span style="color: red;">{{ absen.status }}</span>
+                                {% else %}
+                                    <span style="color: yellow;">{{ absen.status }}</span>
+                                {% endif %}</td>
+                                <td>{{ absen.jumlah_potongan_tukin }}</td>
                             
                         </tr>
                         {% endif %}

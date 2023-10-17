@@ -9,8 +9,9 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Data Penilaian Pegawai
-                <a href="{% url 'cetak_nilai' %}" class="btn btn-success float-right">Cetak Data Absen ke Excel</a>
+            <h6 class="m-0 font-weight-bold text-primary">Data Penilaian Pegawai Bulan: {{ current_month }}
+               
+
             </h6>
             
         </div>
@@ -26,20 +27,24 @@
                         <tr>
                             <th>No</th>
                             <th>Nama</th>
+                            <th>Bulan</th>
                             <th>Nilai Rata Rata</th>
                             <th>Nilai</th>
+                            <th>Potongan</th>
                             
                         </tr>
                     </thead>
                     <tbody>
+                        {% for nilaiin in nilai %}
                         <tr>
-                        {% for nilai in nilai %}
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ nilai.pegawaipribadi.nama }}</td>
-                        <td>{{ nilai.rata_rata }}</td>
-                        <td>{{ nilai.nilai_huruf }}</td>
-                        {% endfor %}
+                        <td>{{ nilaiin.pegawaipribadi.nama }}</td>
+                        <td>{{ nilaiin.tanggal_penilaian }}</td>
+                        <td>{{ nilaiin.rata_rata }}</td>
+                        <td>{{ nilaiin.nilai_huruf }}</td>
+                        <td>{{ nilaiin.potongan  }}</td>
                     </tr>
+                    {% endfor %}
                     </tbody>
                 
                 </table>

@@ -1,0 +1,6 @@
+.bg-login-image {
+    background-image: url("{% static 'img/gedung.jpg' %}");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}

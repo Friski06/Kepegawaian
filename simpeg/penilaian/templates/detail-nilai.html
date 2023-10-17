@@ -1,32 +1,29 @@
 {% extends 'base.html' %}
     
 {% block content %}
-   <!-- Begin Page Content -->
-   <div class="container-fluid">
+<div class="container-fluid">
+
     <!-- Page Heading -->
     
-
+    
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            
-            <h6 class="m-0 font-weight-bold text-primary">Data Penilaian Pegawai
-                <a href="{% url 'cetak_nilai' %}" class="btn btn-success float-right">Cetak Nilai ke Excel</a>
-            </h6>
-            
+            <h6 class="m-0 font-weight-bold text-primary">Data Penilaian Pegawai Bulan: {{ current_month }}</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 {% for message in messages %}
-            {% if message %}
-            <div class="alert alert-success">{{ message }}</div>
-            {% endif %}
-            {% endfor %}
+                    {% if message %}
+                        <div class="alert alert-success">{{ message }}</div>
+                    {% endif %}
+                {% endfor %}
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>No</th>
                             <th>Nama</th>
+                            <th>Bulan</th>
                             <th>Kesopanan</th>
                             <th>Kerapian</th>
                             <th>Dedikasi</th>
@@ -34,40 +31,39 @@
                             <th>Disiplin</th>
                             <th>Kerjasama</th>
                             <th>Tupoksi</th>
-                            <th>Nilai Rata"</th>
+                            <th>Nilai Rata-rata</th>
                             <th>Nilai</th>
                             <th>% Potongan</th>
-                            
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
                         {% for bawah in nilai %}
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ bawah.pegawaipribadi.nama }}</td>
-                        <td>{{ bawah.kesopanan }}</td>
-                        <td>{{ bawah.kerapian }}</td>
-                        <td>{{ bawah.dedikasi }}</td>
-                        <td>{{ bawah.loyalitas }}</td>
-                        <td>{{ bawah.disiplin }}</td>
-                        <td>{{ bawah.kerjasama }}</td>
-                        <td>{{ bawah.tupoksi }}</td>
-                        <td>{{ bawah.rata_rata }}</td>
-                        <td>{{ bawah.nilai_huruf }}</td>
-                        <td>{{ bawah.potongan }}</td>
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ bawah.pegawaipribadi.nama }}</td>
+                                <td>{{ bawah.tanggal_penilaian }}</td>
+                                <td>{{ bawah.kesopanan }}</td>
+                                <td>{{ bawah.kerapian }}</td>
+                                <td>{{ bawah.dedikasi }}</td>
+                                <td>{{ bawah.loyalitas }}</td>
+                                <td>{{ bawah.disiplin }}</td>
+                                <td>{{ bawah.kerjasama }}</td>
+                                <td>{{ bawah.tupoksi }}</td>
+                                <td>{{ bawah.rata_rata }}</td>
+                                <td>{{ bawah.nilai_huruf }}</td>
+                                <td>{{ bawah.potongan }}</td>
+                                <td> 
+                                    <a href="{% url 'cetak_nilai' 'bulanan' bawah.pegawaipribadi_id %}" class="btn btn-success">Bulanan</a>
+                                    <a href="{% url 'cetak_nilai' 'semester' bawah.pegawaipribadi_id %}" class="btn btn-success">Semester</a>
+                                </td>
+                            </tr>
                         {% endfor %}
-                    </tr>
                     </tbody>
-                
                 </table>
             </div>
         </div>
     </div>
 
 </div>
-
 {% endblock content %}
-    
-
-
-

@@ -15,12 +15,35 @@
             {% if pesan %}
             <div class="alert alert-success">{{ pesan }}</div>
             {% endif %}
-            <form action="/tambah-jabatan/"method="post" enctype="multipart/form-data">
+            <form action="/tambah-jabatan/" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
             
                 <button class="btn btn-primary">Tambah Pegawai</button>
-                <a href="/dashboard"class="btn btn-danger">Kembali</a>
+                <a href="/dashboard" class="btn btn-danger">Kembali</a>
+            </form>
+            
+            <hr> <!-- Tambah garis pemisah -->
+
+            <!-- Form untuk mengubah tipe pengguna -->
+            <h2>Ubah Tipe Pengguna</h2>
+            <form action="{% url 'change_user_type' jabatan.id %}" method="post">
+                {% csrf_token %}
+                <label for="user_id">Select User:</label>
+                <select name="user_id" id="user_id">
+                    {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label for="user_type">Select User Type:</label>
+                <select name="user_type" id="user_type">
+                    <option value="admin">Admin</option>
+                    <option value="staff">Staff</option>
+                    <!-- Add more options as needed -->
+                </select>
+                <br>
+                <button type="submit" class="btn btn-primary">Ubah Tipe Pengguna</button>
             </form>
         </div>
     </div>

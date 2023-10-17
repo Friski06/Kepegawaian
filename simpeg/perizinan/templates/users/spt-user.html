@@ -20,6 +20,7 @@
                 <tr>
                     <th>Nama</th>
                     <th>Nrp</th>
+                    <th>Tanggal Pengajuan</th>
                     <th>Jenis Kegiatan</th>
                     <th>Tempat Kegiatan</th>
                     <th>Tanggal Mulai</th>
@@ -29,40 +30,31 @@
                 </tr>
             </thead>
             <tbody>
-                {% for spt in spt %}
-                {% if spt.status == 'DISETUJUI' or spt.status == 'DITOLAK' %}
+                {% for bawah in spt %}
+                {% if bawah.status == 'DISETUJUI' or bawah.status == 'DITOLAK' %}
                 <tr>
-                    <td>{{ spt.pegawaipribadi.nama }}</td>
-                    <td>{{ spt.pegawaipribadi.nip }}</td>
-                    <td>{{ spt.jenis_kegiatan }}</td>
-                    <td>{{ spt.tempat_kegiatan }}</td>
-                    <td>{{ spt.tgl_mulai_kegiatan }}</td>
-                    <td>{{ spt.tgl_selesai_kegiatan }}</td>
-                    <td>{{ spt.status }}</td>
+                    <td>{{ bawah.pegawai_nama }}</td>
+                    <td>{{ bawah.pegawai_nip }}</td>
+                    <td>{{ bawah.tanggal_pengajuan }}</td>
+                    <td>{{ bawah.jenis_kegiatan }}</td>
+                    <td>{{ bawah.tempat_kegiatan }}</td>
+                    <td>{{ bawah.tgl_mulai_kegiatan }}</td>
+                    <td>{{ bawah.tgl_selesai_kegiatan }}</td>
+                    <td>{% if bawah.status == 'DISETUJUI' %}
+                        <span style="color: green;">{{ bawah.status }}</span>
+                        {% elif bawah.status == 'DITOLAK' %}
+                            <span style="color: red;">{{ bawah.status }}</span>
+                        {% else %}
+                            <span style="color: yellow;">{{ bawah.status }}</span>
+                        {% endif %}</td>
                     
                     <td>
                         <center>
-                            <a href="{% url 'ubah_spt' spt.id %}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'detailspt' bawah.id %}" class="btn btn-primary"><i class="fas fa-eye"></i></a>
                             <!-- Button trigger modal -->
-                            <button data-toggle="modal" data-target="#hapus-{{ spt.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                           
                         </center>
                     </td>
-                    <div class="modal" id="hapus-{{ spt.id }}">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3 class="modal-title">Hapus</h3>
-                                </div>
-                                <div class="modal-body">
-                                    Apakah anda yakin ingin menghapus?
-                                </div>
-                                <div class="modal-footer">
-                                    <a href="{% url 'hapus_spt' spt.id %}" class="btn btn-danger">Hapus</a>
-                                    <button class="btn btn-dark" data-dismiss="modal">Tidak</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </tr>
                 {% endif %}
                 {% endfor %}

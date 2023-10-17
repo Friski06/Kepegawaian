@@ -93,7 +93,7 @@ class PegawaiPekerjaanForm(ModelForm):
         ('akutansi', 'Akutansi'),
         ('teknik informasi', 'Teknologi Informasi'),
         ('mekatronika', 'Mekatronika'),
-        ('staf','Staf'),
+        ('staf','-'),
        
     ]
     UNIT_CHOICES = [
@@ -108,6 +108,7 @@ class PegawaiPekerjaanForm(ModelForm):
         ('pusat_perencanaan_dan_pengembangan', 'Pusat Perencanaan Dan Pengembangan'),
         ('pusat_data_dan_akreditasi', 'Pusat Data Dan Akreditasi'),
         ('pusat_pengawasan_pengadilan_internal', 'Pusat Pengawasan Pengadilan Internal'),
+        ('kosong','-'),
     ]
     
     mulai_kerja = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control','type': 'date'}))
@@ -146,7 +147,7 @@ class PegawaiPendidikanForm(ModelForm):
     tingkat = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     class Meta:
         model = PegawaiPendidikan
-        exclude = ['pribadi']
+        exclude = ['pegawaipribadi']
 
 class PegawaiKeluargaForm(ModelForm):
     JENIS_KELAMIN_CHOICES = [
@@ -171,6 +172,7 @@ class PegawaiKeluargaForm(ModelForm):
     class Meta:
         model = PegawaiKeluarga
         fields = '__all__'
+        exclude = ['user','pegawaipribadi']
 
 class PegawaiBankForm(ModelForm):
     
@@ -184,6 +186,7 @@ class PegawaiBankForm(ModelForm):
     class Meta:
         model = PegawaiBank
         fields = '__all__'
+        exclude = ['pegawaipribadi']
 
 
     

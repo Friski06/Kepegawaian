@@ -1,6 +1,7 @@
 from django.db import models
 from adkep.models import JabatanBawahan, PegawaiPribadi
 from django.conf import settings
+from django.utils import timezone
 # Create your models here.
 
 class Jabatan(models.Model):
@@ -27,7 +28,7 @@ class Cutiizin(models.Model):
         ('DISETUJUI', 'Disetujui'),
         ('DITOLAK', 'Ditolak'),
     ]
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    
     
     keperluan = models.CharField(max_length=100)
     tgl_mulai = models.DateField()
@@ -45,9 +46,27 @@ class Cutiizin(models.Model):
     verifikasi_status = models.CharField(max_length=20, choices=verifikasi_choices, default='BELUM')
     pegawaipribadi = models.ForeignKey(PegawaiPribadi, on_delete=models.CASCADE, null=True)
 
+    def save(self, *args, **kwargs):
+        # Calculate the duration between tgl_mulai and tgl_selesai
+        if self.tgl_mulai and self.tgl_selesai:
+            duration = self.tgl_selesai - self.tgl_mulai
+            self.hari = duration.days + 1  # Add 1 to include both start and end dates
+
+        super(Cutiizin, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"cutiizin: {self.id}"
+    
+
+class Upload_Spt(models.Model):
+    nama = models.CharField(max_length=200)
+    pdf_file = models.FileField(upload_to='spt_pdfs/')
+    pegawaipribadi = models.ForeignKey(PegawaiPribadi, on_delete=models.CASCADE, null=True)
+    
+   
+
+    def __str__(self):
+        return f"uploadspt: {self.id}"
         
 class Spt(models.Model):
     STATUS = [
@@ -55,8 +74,8 @@ class Spt(models.Model):
         ('DISETUJUI', 'Disetujui'),
         ('DITOLAK', 'Ditolak'),
     ]
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-    
+    pegawai_nama = models.CharField(max_length=100,null=True, blank=True)
+    pegawai_nip = models.CharField(max_length=50,null=True, blank=True)
     jenis_kegiatan = models.CharField(max_length=100)
     tempat_kegiatan = models.CharField(max_length=100)
     tgl_mulai_kegiatan = models.DateField()
@@ -64,6 +83,8 @@ class Spt(models.Model):
     status = models.CharField(max_length=20, choices=STATUS, default='BELUM')
     jabatan = models.ForeignKey(JabatanBawahan, on_delete=models.CASCADE,max_length=100, null=True)
     pegawaipribadi = models.ForeignKey(PegawaiPribadi, on_delete=models.CASCADE, null=True)
+    spt = models.ForeignKey(Upload_Spt, on_delete=models.CASCADE, null=True)
+    tanggal_pengajuan = models.DateField(default=timezone.now)
     
     def __str__(self):
         return f"spt: {self.id}"

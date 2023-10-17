@@ -1,5 +1,6 @@
 from django.db import models
 from adkep.models import PegawaiPribadi
+from django.utils import timezone
 
 # Create your models here.
 
@@ -15,6 +16,7 @@ class Nilai(models.Model):
     nilai_huruf = models.CharField(max_length=100)
     potongan = models.CharField(max_length=100)
     pegawaipribadi = models.ForeignKey(PegawaiPribadi, on_delete=models.CASCADE, null=True)
-
+    tanggal_penilaian = models.DateField(default=timezone.now)
+    
     def __str__(self):
         return f"nilai: {self.id}"

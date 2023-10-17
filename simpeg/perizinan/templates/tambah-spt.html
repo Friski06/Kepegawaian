@@ -3,28 +3,132 @@
 {% block content %}
 
 <div class="container-fluid">
-
-    <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-2">
     </div>
     
-            <div class="card" style="width:40%; margin-bottom: 100px  ">
-                <div class="card-body">
-            <h2>
-                Data SPT
-            </h2>
-            {% if pesan %}
-            <div class="alert alert-success">{{ pesan }}</div>
-            {% endif %}
-            <form action="/tambah-spt/"method="post">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h2 class="m-0 font-weight-bold text-primary">Tambah Data SPT</h2>
+        </div>
+        <div class="card-body">
+            <form action="/tambah-spt/" method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
+                
+                <!-- Jenis Kegiatan -->
+                <div class="form-group">
+                    <label for="{{ form.jenis_kegiatan.id_for_label }}">Jenis Kegiatan:</label>
+                    {{ form.jenis_kegiatan }}
+                </div>
+                
+                <!-- Tabel Nama dan NIP -->
+                <table id="tabel-nama-nip" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>NIP</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea class="form-control" name="nama[]" rows="3">{{ request.user.pegawaipribadi.nama }}</textarea>
+                            </td>
+                            <td>
+                                <textarea class="form-control" name="nip[]" rows="3">{{ request.user.pegawaipribadi.nip }}</textarea>
+                            </td>
+                            <td><button type="button" id="tambah-baris" class="btn btn-primary"><i class="fas fa-plus"></i></button></td> <!-- Mengosongkan kolom aksi pada baris pertama -->
+                        </tr>
+                    </tbody>
+                </table>
+                
+                
+                
+                <!-- Tempat Kegiatan -->
+                <div class="form-group">
+                    <label for="{{ form.tempat_kegiatan.id_for_label }}">Tempat Kegiatan:</label>
+                    {{ form.tempat_kegiatan }}
+                </div>    
+                
+                <!-- Tanggal Mulai Kegiatan -->
+                <div class="form-group">
+                    <label for="{{ form.tgl_mulai_kegiatan.id_for_label }}">Tanggal Mulai Kegiatan:</label>
+                    <input type="date" class="form-control" id="{{ form.tgl_mulai_kegiatan.id_for_label }}" name="{{ form.tgl_mulai_kegiatan.name }}">
+                </div>
+                
+                <!-- Tanggal Selesai Kegiatan -->
+                <div class="form-group">
+                    <label for="{{ form.tgl_selesai_kegiatan.id_for_label }}">Tanggal Selesai Kegiatan:</label>
+                    <input type="date" class="form-control" id="{{ form.tgl_selesai_kegiatan.id_for_label }}" name="{{ form.tgl_selesai_kegiatan.name }}">
+                </div>
+                
+                <!-- Jabatan -->
+                <div class="form-group">
+                    <label for="{{ form.jabatan.id_for_label }}">Jabatan:</label>
+                    {{ form.jabatan }}
+                </div>
+                
+                <!-- Status (hidden) -->
                 <input type="hidden" value="belum" name="status">
+                
+                <!-- Tombol Submit dan Kembali -->
                 <button class="btn btn-primary">Tambah</button>
-                <a href="/spt"class="btn btn-danger">Kembali</a>
+                <a href="/spt" class="btn btn-danger">Kembali</a>
             </form>
         </div>
     </div>
 </div>
+
+<!-- CSS untuk mengatur tampilan -->
+<style>
+    #tabel-nama-nip th,
+    #tabel-nama-nip td {
+        text-align: center;
+    }
+    
+    .hapus-baris {
+        width: 100%;
+    }
+    
+    #tambah-baris {
+        margin-top: 10px;
+    }
+</style>
+
+<!-- JavaScript untuk menambahkan dan menghapus baris -->
+<script>
+    document.getElementById("tambah-baris").addEventListener("click", function() {
+        var tabelNamaNIP = document.getElementById("tabel-nama-nip").getElementsByTagName("tbody")[0];
+        var baris = tabelNamaNIP.insertRow();
+        
+        var cell1 = baris.insertCell(0);
+        var cell2 = baris.insertCell(1);
+        var cell3 = baris.insertCell(2);
+        
+        var newNamaField = document.createElement("textarea");
+        newNamaField.className = "form-control";
+        newNamaField.name = "nama[]";
+        
+        var newNipField = document.createElement("textarea");
+        newNipField.className = "form-control";
+        newNipField.name = "nip[]";
+        
+        var hapusButton = document.createElement("button");
+        hapusButton.type = "button";
+        hapusButton.className = "btn btn-danger hapus-baris";
+        hapusButton.textContent = "Hapus";
+        
+        cell1.appendChild(newNamaField);
+        cell2.appendChild(newNipField);
+        cell3.appendChild(hapusButton);
+    });
+
+    document.addEventListener("click", function(e) {
+        if (e.target && e.target.className == "btn btn-danger hapus-baris") {
+            var baris = e.target.parentNode.parentNode;
+            baris.parentNode.removeChild(baris);
+        }
+    });
+</script>
 
 {% endblock content %}

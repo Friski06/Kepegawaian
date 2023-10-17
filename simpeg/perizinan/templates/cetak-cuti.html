@@ -1,49 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SURAT IZIN KELUAR / CUTI KARYAWAN</title>
     <style>
+        /* Gaya tampilan PDF */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif, sans-serif;
+            background-color: #f5f5f571;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
         }
         th, td {
-            border: 1px solid black;
-            padding: 8px;
+            border: 1px solid #ccc;
+            padding: 10px;
             text-align: left;
         }
         th {
             background-color: #f2f2f2;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <h1>Rekap Absen Bulanan</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Nama</th>
-                <th>NIP</th>
-                <th>Tanggal</th>
-                <th>Jam Masuk</th>
-                <th>Jam Pulang</th>
-                <th>Jumlah Jam</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in dataset %}
-            <tr>
-                <td>{{ row.pegawaipribadi.nama }}</td>
-                <td>{{ row.pegawaipribadi.nip }}</td>
-                <td>{{ row.tanggal }}</td>
-                <td>{{ row.masuk }}</td>
-                <td>{{ row.pulang }}</td>
-                <td>{{ row.jumlah_jam }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <h2>Data Pegawai</h2>
+        <p>Nama: {{ pegawaipribadi.nama }}</p>
+        <p>NRP: {{ pegawaipribadi.nip }}</p>
+
+        <div class="table-container">
+            <h2>Absen Data</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Keperluan</th>
+                        <th>Dari Tanggal</th>
+                        <th>Sampai Tanggal</th>
+                        <th>Izin Atasan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bawah in cuti %}
+                        <tr>
+                            <td>{{ bawah.keperluan }}</td>
+                            <td>{{ bawah.tgl_mulai }}</td>
+                            <td>{{ bawah.tgl_selesai }}</td>
+                            <td>{{ bawah.verifikasi_kaunit }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="table-container">
+            <h2>Data Lainnya</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Verifikasi Direksi</th>
+                        <th>Tanggal Disetujui</th>
+                        <th>Keperluan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bawah in cuti %}
+                        <tr>
+                            <td>{{ bawah.verifikasi_direksi }}</td>
+                            <td>{{ bawah.tgl_mulai }}</td>
+                            <td>{{ bawah.keperluan }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 </html>

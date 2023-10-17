@@ -28,10 +28,7 @@
                             <!-- Tambahkan pilihan bulan lainnya -->
                         </select>
                     </form>
-                    <div>
-                        <a href="{% url 'cetak_absen' %}" class="btn btn-success float-right">Cetak Data Absen ke Excel</a>
-                        <a href="{% url 'cetak_absen_user_pdf' %}" class="btn btn-danger float-right" style="margin-right: 10px;">Cetak Data Absen ke PDF</a>
-                    </div>
+                    
                 </h6>
             </div>
             <div class="card-body">
@@ -56,10 +53,22 @@
                                 <td>{{ absen.masuk }}</td>
                                 <td>{{ absen.pulang }}</td>
                                 <td>{{ absen.jumlah_jam }}</td>
+                                <td> 
+                                    <a href="{% url 'cetak_absen' 'bulanan' absen.pegawaipribadi_id %}" class="btn btn-success">Bulanan</a>
+                                    <a href="{% url 'cetak_absen' 'semester' absen.pegawaipribadi_id %}" class="btn btn-success">Semester</a>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="5">Total Jumlah Jam </th>
+                                <th>{{ total_jumlah_jam }}</th>
+                                
+                            </tr>
+                        </tfoot>
                     </table>
+                    
                 </div>
             </div>
         </div>

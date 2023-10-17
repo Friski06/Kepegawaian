@@ -1,13 +1,20 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
-from perizinan.models import Cutiizin, Spt, Notifikasi
+from perizinan.models import Cutiizin, Spt, Notifikasi, Upload_Spt
+from adkep.models import PegawaiPribadi
 from django.contrib.auth.models import User
-from perizinan.form import FromCuti, FromSpt
+from perizinan.form import FromCuti, FromSpt,SptUploadForm
 from django.contrib import messages
 from login.models import User
 from perizinan.resources import CutiResource
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+from io import BytesIO
+from django.utils import timezone
+from openpyxl import Workbook
+from django.db.models import Q
+from datetime import date
+
 
 
 def check_access_superuser(user):
@@ -18,7 +25,7 @@ def check_access_superuser(user):
 
 @login_required(login_url='login')
 def cuti_user(request):
-    cuti = Cutiizin.objects.filter(user_id=request.session['_auth_user_id'])
+    cuti = Cutiizin.objects.filter(pegawaipribadi_id=request.session['_auth_user_id'])
     kontext = {
         'cuti' : cuti,
         
@@ -70,10 +77,19 @@ def tambah_cutiizin(request):
    if request.method == 'POST':
         form = FromCuti(request.POST)
         if form.is_valid():
-            form.save()
+            cuti = form.save(commit=False)  # Tambahkan parameter commit=False untuk sementara
+            cuti.pegawaipribadi = request.user.pegawaipribadi
+            # Set tgl_mulai and tgl_selesai fields before saving the form
+            tgl_mulai = form.cleaned_data['tgl_mulai']
+            tgl_selesai = form.cleaned_data['tgl_selesai']
+            form.instance.tgl_mulai = tgl_mulai
+            form.instance.tgl_selesai = tgl_selesai
+
+            # Save the form
+            cuti.save()
             return redirect('tambah_cutiizin')
    else:
-        form = FromCuti()
+        form = FromCuti(initial={'hari':0})
    context = {
         'form': form,
     }
@@ -133,32 +149,121 @@ def cetak_rekap_cuti(request):
 @login_required(login_url='login')
 def cetak_rekap_cuti_pdf(request):
    
-   cuti_resource = CutiResource()
-   queryset = Cutiizin.objects.filter(pegawaipribadi_id=request.session['_auth_user_id'])
-   dataset = cuti_resource.export(queryset=queryset)
+   pegawaipribadi = PegawaiPribadi.objects.first()
+   cuti = Cutiizin.objects.all()
+
     
-   template_path = 'cetak-cuti.html'  # Ganti dengan path template HTML yang sesuai
-   context = {'dataset': dataset}
-    
-   response = HttpResponse(content_type='application/pdf')
-   response['Content-Disposition'] = 'attachment; filename="surat izin.pdf"'
-    
-   template = get_template(template_path)
-   html = template.render(context)
-    
-   pisa_status = pisa.CreatePDF(html, dest=response)
-   if pisa_status.err:
-        return HttpResponse('Gagal membuat PDF', content_type='text/plain')
-    
-   return response
+
+   context = {
+        'pegawaipribadi': pegawaipribadi,
+        'cuti' : cuti,
+        'exporting_pdf': True,
+    }
+
+   template = get_template('cetak-cuti.html')
+   html_content = template.render(context)
+
+   pdf_buffer = BytesIO()
+   pdf = pisa.pisaDocument(BytesIO(html_content.encode("UTF-8")), pdf_buffer)
+
+   if not pdf.err:
+        response = HttpResponse(pdf_buffer.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="cuti.pdf"'
+        return response
+   return HttpResponse('Error saat menghasilkan PDF', content_type='text/plain')
+
 #----akir cetak data----#
+
+@login_required(login_url='login')
+def cetak_user_cuti_pdf(request):
+   
+   pegawaipribadi = PegawaiPribadi.objects.get(user=request.user)  # Mengambil pegawai yang sesuai dengan pengguna yang sedang login
+   cuti = Cutiizin.objects.filter(pegawaipribadi=pegawaipribadi)
+
+    
+
+   context = {
+        'pegawaipribadi': pegawaipribadi,
+        'cuti' : cuti,
+        'exporting_pdf': True,
+    }
+
+   template = get_template('cetak-cuti.html')
+   html_content = template.render(context)
+
+   pdf_buffer = BytesIO()
+   pdf = pisa.pisaDocument(BytesIO(html_content.encode("UTF-8")), pdf_buffer)
+
+   if not pdf.err:
+        response = HttpResponse(pdf_buffer.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="cuti.pdf"'
+        return response
+   return HttpResponse('Error saat menghasilkan PDF', content_type='text/plain')
+
+#----akir cetak data----#
+
+
+# Rekap Cuti User
+
+@login_required(login_url='login')
+def rekap_cuti_user(request,pegawaipribadi_id):
+   
+    cuti = Cutiizin.objects.filter(pegawaipribadi=pegawaipribadi_id)
+   
+    kontext = {
+        'cuti' : cuti,
+        
+    }
+
+    return render(request, 'users/rekap-cuti.html', kontext)
+
+
+@login_required(login_url='login')
+def cetak_cuti(request, periode, pegawaipribadi_id):
+   workbook = Workbook()
+   sheet = workbook.active
+   sheet.title = "Rekap Cuti"
+   current_month = timezone.now().month 
+   pegawai = Cutiizin.objects.filter(pegawaipribadi_id=pegawaipribadi_id)
+   pegawai_bulan = Cutiizin.objects.filter(pegawaipribadi_id=pegawaipribadi_id)
+
+   if periode == 'bulanan':
+        current_month = timezone.now().month
+        data_nilai = pegawai_bulan.filter(tgl_mulai__month=current_month, tgl_mulai__year=timezone.now().year)
+   elif periode == 'semester':
+        current_month = timezone.now().month
+
+        # Filter untuk semester Maret - Agustus (bulan 3-8) -- smester ganjil
+        if 3 <= current_month <= 8:
+            data_nilai = pegawai.filter(tgl_mulai__month__range=[3, 8], tgl_mulai__year=timezone.now().year)
+
+        # Filter untuk semester September - Februari (bulan 9-2) -- smester genap
+        else:
+            data_nilai = pegawai.filter(Q(tgl_mulai__month__gte=9) | Q(tgl_mulai__month__lte=2), tgl_mulai__year=timezone.now().year)
+    # Menambahkan header ke baris pertama
+   header = ['No', 'Nama', 'Keperluan','Tanggal Mulai','Tanggal Selesai']
+   sheet.append(header)
+
+    # Menambahkan data nilai ke baris selanjutnya
+   for idx, cuti in enumerate(data_nilai):
+        row_data = [idx + 1, cuti.pegawaipribadi.nama, cuti.keperluan,cuti.tgl_mulai.strftime('%B %Y'),cuti.tgl_selesai.strftime('%B %Y')]
+        sheet.append(row_data)
+
+   response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+   response['Content-Disposition'] = f'attachment; filename=RekapNilai_{periode}.xlsx'
+   workbook.save(response)
+
+   return response
+
+
+# Akir Cuti
 
 
 
 
 @login_required(login_url='login')
 def spt_user(request):
-    spt = Spt.objects.filter(user_id=request.session['_auth_user_id'])
+    spt = Spt.objects.filter(pegawaipribadi_id=request.session['_auth_user_id'])
     kontext = {
         'spt' : spt,
         
@@ -215,19 +320,52 @@ def spt(request):
     return render(request, 'spt.html', kontext)
 
 @login_required(login_url='login')
-def tambah_spt(request):
+def upload_spt(request):
+    if request.method == 'POST':
+        form = SptUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('spt')  # Ganti dengan halaman yang sesuai
+    else:
+     form = SptUploadForm()
+    return render(request, 'upload-spt.html', {'form': form})
+    
 
-    if request.POST:
-       form = FromSpt(request.POST) 
-       if form.is_valid():
-         form.save()
-         pesan = "Data Berhasil Di Tambah"
-         form = FromSpt()
-         kontext = {
-             'form' : form,
-             'pesan' : pesan,
-         }
-         return render(request, 'tambah-spt.html', kontext)  
+@login_required(login_url='login')
+def detail_spt(request,spt_id):
+   
+    spt = get_object_or_404(Spt, pk=spt_id)
+    upload_spt = spt.spt
+    return render(request, 'detail-spt.html', {'spt': spt, 'upload_spt': upload_spt})
+
+@login_required(login_url='login')
+def tambah_spt(request):
+    if request.method == 'POST':
+        form = FromSpt(request.POST)
+        current_month = timezone.now().day
+        if form.is_valid():
+            spt = form.save(commit=False)
+            # Ambil semua nama dan nip yang diisi dalam list
+            nama_list = request.POST.getlist('nama[]')
+            nip_list = request.POST.getlist('nip[]')
+
+            # Gabungkan semua nilai dalam list menjadi satu teks (dalam contoh ini, dipisahkan oleh koma)
+            spt.pegawai_nama = ', '.join(nama_list)
+            spt.pegawai_nip = ', '.join(nip_list)
+            if not spt.pegawai_nama or not spt.pegawai_nip:
+                # Jika nama atau NIP tidak diisi, gunakan nama dan NIP pengguna yang mengajukan
+                spt.pegawai_nama = request.user.pegawaipribadi.nama
+                spt.pegawai_nip = request.user.pegawaipribadi.nip
+            spt.pegawaipribadi = request.user.pegawaipribadi
+            spt.save()
+            spt.tanggal_pengajuan = timezone.now()
+            pesan = "Data Berhasil Di Tambah"
+            form = FromSpt()
+            kontext = {
+                'spt': spt,
+                'pesan': pesan,
+            }
+            return render(request, 'tambah-spt.html', kontext)
     else:
         form = FromSpt()
 
