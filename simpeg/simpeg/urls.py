@@ -6,7 +6,6 @@ from penilaian.views import *
 from absen.views import *
 from dashboard.views import *
 from login.views import *
-from codmesin.mesin import *
 from django.conf.urls.static import static
 
 
@@ -121,7 +120,7 @@ urlpatterns = [
     path('tolakukur/', tolakukur, name='tolakukur'),
     path('cetak_nilai/<str:periode>/<int:pegawaipribadi_id>', cetak_nilai, name='cetak_nilai'),
     path('editnilai/edit/<int:pegawaipribadi_id>/', edit_nilai, name='edit_nilai'),
-    path('codmesin/codnmesin/', Mesin, name='codmesin'),
+    
 
 
 ]
